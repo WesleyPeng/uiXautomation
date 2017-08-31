@@ -24,16 +24,45 @@ class TestYAMLData(unittest.TestCase):
             os.path.dirname(__file__),
             'data.yaml'
         )
+        key = 'unittest'
 
         data = YAMLData(
-            **{
-                'unittest': self._testMethodName
-            }
+            **{key: []}
         )
-
         data.dump(file_path)
 
         self.assertIsInstance(
             YAMLData.load(file_path),
             YAMLData
         )
+        os.remove(file_path)
+
+        value = 'dummy data'
+        data[key] += [value]
+        self.assertIn(
+            value,
+            data[key]
+        )
+        data.unittest.pop()
+
+        data[key] = value
+        self.assertEqual(
+            getattr(data, key),
+            value
+        )
+
+        data += {
+            key: self._testMethodName,
+            'other': 'any'
+        }
+
+        self.assertEqual(
+            data[key],
+            self._testMethodName
+        )
+
+        with self.assertRaises(ValueError):
+            data += value
+
+        with self.assertRaises(ValueError):
+            data += [value]
