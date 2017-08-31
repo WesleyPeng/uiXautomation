@@ -1,5 +1,5 @@
 """
-Multi-layered Extensible Test Automation Framework
+Extensible Test Automation Framework
 """
 
 from pybuilder.core import init, use_plugin
@@ -8,7 +8,7 @@ use_plugin('python.core')
 use_plugin('python.install_dependencies')
 use_plugin('python.distutils')
 
-name = 'PyUIX'
+name = 'PyXTaf'
 summary = 'Extensible Test Automation Framework'
 
 default_task = [
