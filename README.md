@@ -1,5 +1,4 @@
 # uiXautomation
-=============================================================
 
 ### Overview
 Extensible Test Automation Framework
