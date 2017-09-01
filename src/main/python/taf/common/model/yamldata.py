@@ -14,48 +14,69 @@
 
 import yaml
 
-from taf.common.api import Serializable
+from taf.common.api.io import Serializable
 
 
 class YAMLData(yaml.YAMLObject, Serializable):
-    """
-    Recursive YAML Data Model
-    """
-
     yaml_tag = '!YAMLData'
 
     def __init__(self, **kwargs):
         super(YAMLData, self).__init__()
 
         for key, value in kwargs.iteritems():
-            self.__setitem__(key, value)
+            self.__setattr__(key, value)
+
+    def __getattr__(self, item):
+        return self.__getattribute__(item)
+
+    def __getitem__(self, item):
+        return self.__getattribute__(item)
 
     def __setattr__(self, name, value):
-        self[name] = value
-
-    def __setitem__(self, key, value):
-        assert (key is not None) and getattr(
-            key, 'strip', lambda: None
+        assert (name is not None) and getattr(
+            name, 'strip', lambda: None
         )()
 
         vars(self).update(
-            **{key: YAMLData.normalize_data(
-                value
-            )}
+            **{
+                name: self.normalize_data(value)
+            }
         )
+
+    def __setitem__(self, key, value):
+        self.__setattr__(key, value)
+
+    def __iadd__(self, other):
+        _data = self.normalize_data(other)
+
+        if isinstance(_data, type(self)):
+            for key, value in vars(_data).iteritems():
+                vars(self).update(
+                    **{
+                        key: value
+                    }
+                )
+        else:
+            raise ValueError(
+                'Assigning invalid value: ({})'.format(
+                    other
+                )
+            )
+
+        return self
 
     def dump(self, path):
         try:
-            data = vars(self).copy()
-
-            for key, value in vars(self).iteritems():
+            for key, value in vars(self).copy().iteritems():
                 if hasattr(value, '__dict__') and (
-                        not isinstance(value, yaml.YAMLObject)
+                        not isinstance(
+                            value, yaml.YAMLObject
+                        )
                 ):
-                    delattr(data, key)
+                    self.__delattr__(key)
 
             with open(path, 'w') as stream:
-                yaml.dump(data, stream)
+                yaml.dump(self, stream)
         except Exception:
             raise
 
@@ -76,8 +97,8 @@ class YAMLData(yaml.YAMLObject, Serializable):
 
         return cls.normalize_data(data)
 
-    @staticmethod
-    def normalize_data(data):
+    @classmethod
+    def normalize_data(cls, data):
         if isinstance(data, YAMLData):
             return data
 
@@ -92,7 +113,7 @@ class YAMLData(yaml.YAMLObject, Serializable):
 
             for datum in data:
                 _data.append(
-                    YAMLData.normalize_data(datum)
+                    cls.normalize_data(datum)
                 )
 
             return _data
@@ -101,7 +122,7 @@ class YAMLData(yaml.YAMLObject, Serializable):
             _data = yaml.safe_load(
                 yaml.safe_dump(data)
             )
-        except:
+        except Exception:
             raise
 
         return _data

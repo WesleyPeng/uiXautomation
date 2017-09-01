@@ -13,3 +13,20 @@
 # limitations under the License.
 
 from .aut import AUT
+
+
+class Browser(AUT):
+    def __init__(
+            self,
+            name='firefox',
+            identifier=None
+    ):
+        self.name = name
+        self.id = identifier
+
+    @staticmethod
+    def launch(app_location, **kwargs):
+        pass
+
+    def close(self):
+        pass
