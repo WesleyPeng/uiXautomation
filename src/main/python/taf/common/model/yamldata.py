@@ -14,14 +14,10 @@
 
 import yaml
 
-from taf.common.api import Serializable
+from taf.common.api.io import Serializable
 
 
 class YAMLData(yaml.YAMLObject, Serializable):
-    """
-    Recursive YAML Data Model
-    """
-
     yaml_tag = '!YAMLData'
 
     def __init__(self, **kwargs):
@@ -126,7 +122,7 @@ class YAMLData(yaml.YAMLObject, Serializable):
             _data = yaml.safe_load(
                 yaml.safe_dump(data)
             )
-        except:
+        except Exception:
             raise
 
         return _data

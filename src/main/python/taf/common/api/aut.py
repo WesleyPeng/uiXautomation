@@ -12,4 +12,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from .aut import AUT
+from abc import abstractmethod
+
+
+class AUT(object):
+    @staticmethod
+    @abstractmethod
+    def launch(app_location, **kwargs):
+        raise NotImplementedError(
+            'Launch application'
+        )
+
+    @abstractmethod
+    def close(self):
+        raise NotImplementedError(
+            'Close the application under test'
+        )

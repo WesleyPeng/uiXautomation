@@ -19,50 +19,67 @@ from taf.common.model import YAMLData
 
 
 class TestYAMLData(unittest.TestCase):
+    def setUp(self):
+        self.data = YAMLData()
+
+    def tearDown(self):
+        self.data = None
+
+    def test_updating_node_with_valid_data(self):
+        key = 'unittest'
+        value = 'dummy data'
+
+        self.data[key] = []
+        self.data[key] += [value]
+        self.assertIn(
+            value,
+            self.data[key]
+        )
+        self.data.unittest.pop()
+
+        self.data[key] = value
+        self.assertEqual(
+            getattr(self.data, key),
+            value
+        )
+
+        self.data += {
+            key: self._testMethodName,
+            'other': dict(
+                key=self.__class__.__name__
+            )
+        }
+
+        self.assertEqual(
+            self.data[key],
+            self._testMethodName
+        )
+
+        self.assertEqual(
+            self.data.other.key,
+            self.__class__.__name__
+        )
+
+    def test_updating_node_with_invalid_data(self):
+        self.data.key = {}
+
+        with self.assertRaises(ValueError):
+            self.data.key += 'value'
+
+        with self.assertRaises(ValueError):
+            self.data.key += ['value']
+
     def test_dump_load(self):
         file_path = os.path.join(
             os.path.dirname(__file__),
             'data.yaml'
         )
-        key = 'unittest'
 
-        data = YAMLData(
-            **{key: []}
-        )
-        data.dump(file_path)
-
+        self.data += {'key': 'value'}
+        self.data.dump(file_path)
         self.assertIsInstance(
             YAMLData.load(file_path),
             YAMLData
         )
+
         os.remove(file_path)
-
-        value = 'dummy data'
-        data[key] += [value]
-        self.assertIn(
-            value,
-            data[key]
-        )
-        data.unittest.pop()
-
-        data[key] = value
-        self.assertEqual(
-            getattr(data, key),
-            value
-        )
-
-        data += {
-            key: self._testMethodName,
-            'other': 'any'
-        }
-
-        self.assertEqual(
-            data[key],
-            self._testMethodName
-        )
-
-        with self.assertRaises(ValueError):
-            data += value
-
-        with self.assertRaises(ValueError):
-            data += [value]
