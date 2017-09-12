@@ -15,7 +15,7 @@
 import os
 import unittest
 
-from taf.modeling.utils import YAMLData
+from taf.foundation.utils import YAMLData
 
 
 class TestYAMLData(unittest.TestCase):

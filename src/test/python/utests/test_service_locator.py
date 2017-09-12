@@ -12,5 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from .controls import Controls
-from .plugins import Plugins
+from unittest import TestCase
+
+from taf.foundation import ServiceLocator
+from taf.foundation.enums import Controls
+
+
+class TestServiceLocator(TestCase):
+    def setUp(self):
+        self.conf = ServiceLocator()
+
+    def test_configuration(self):
+        _button = self.conf.get_control(
+            Controls.Button
+        )
+        print _button

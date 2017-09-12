@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from ..patterns import IInvoke
+from taf.foundation.api.patterns import IInvoke
 
 
 class Button(IInvoke):

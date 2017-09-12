@@ -12,5 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from .controls import Controls
-from .plugins import Plugins
+from enum import Enum
+
+
+class Plugins(str, Enum):
+    Web = 'web'
+    Desktop = 'desktop'
+    Mobile = 'mobile'
+    CLI = 'cli'
+    SOAP = 'soap'
+    REST = 'rest'
+    UNKNOWN = 'unknown'

@@ -12,6 +12,35 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import os
+
+from taf.foundation.utils import YAMLData
+
 
 class Configuration(object):
-    pass
+    _instance = None
+
+    def __init__(self):
+        if not Configuration._instance:
+            self._settings = YAMLData.load(
+                os.path.join(
+                    os.path.dirname(__file__),
+                    'config.yml'
+                )
+            )
+
+            Configuration._instance = self
+
+    @classmethod
+    def get_instance(cls):
+        if not Configuration._instance:
+            Configuration()
+
+        return Configuration._instance
+
+    @property
+    def plugins(self):
+        return self._settings.plugins
+
+    def save_as(self, path):
+        self.plugins.dump(path)
