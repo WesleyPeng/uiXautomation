@@ -29,29 +29,9 @@ class ServiceLocator(object):
     _aut = None
     _controls = {}
 
-    def __init__(self, plugin=Plugins.Web):
-        # self._load_aut()
-        self._load_controls(plugin)
-
-    def _load_controls(self, plugin):
+    def __init__(self):
         if not ServiceLocator._plugins:
             self._load_plugins()
-
-        cls = ServiceLocator._plugins.get(plugin, None)
-
-        if cls is None:
-            raise TypeError('Unable to load plugin')
-
-        for control in cls().controls:
-            for func, key in {
-                lambda ctrl: issubclass(ctrl, Button):
-                    Controls.Button,
-                # lambda ctrl: issubclass(ctrl, TextBox):
-                #     Controls.TextBox
-            }.iteritems():
-                if func(control):
-                    ServiceLocator._controls[key] = control
-                    break
 
     def _load_plugins(self):
         _base_dir = os.path.join(
@@ -72,10 +52,12 @@ class ServiceLocator(object):
                         )
                 ):
                     for func, key in {
-                        lambda cls: issubclass(cls, WebPlugin):
-                            Plugins.Web,
-                        # lambda cls: issubclass(cls, DesktopPlugin):
-                        #     Plugins.Desktop,
+                        lambda cls_: issubclass(cls_, WebPlugin) and (
+                                    cls_ is not WebPlugin
+                        ): Plugins.Web,
+                        # lambda cls_: issubclass(cls_, DesktopPlugin) and (
+                        #             cls_ is not WebPlugin
+                        # ): Plugins.Desktop,
                     }.iteritems():
                         if func(cls):
                             ServiceLocator._plugins[key] = cls
@@ -83,15 +65,19 @@ class ServiceLocator(object):
 
     def _inspect_classes(self, plugin_dir):
         classes = []
-        for py in self._find_python_files(plugin_dir):
-            classes.extend(
-                cls for cls in self._import_classes(py)
-            )
+
+        try:
+            for py in self._find_python_files(plugin_dir):
+                classes.extend(
+                    cls for cls in self._import_classes(py)
+                )
+        except Exception:
+            raise
 
         return classes
 
-    def _find_python_files(self, plugin_dir):
-        _cd = os.path.realpath(plugin_dir)
+    def _find_python_files(self, directory):
+        _cd = os.path.realpath(directory)
 
         files = [
             os.path.abspath(_file)
@@ -99,46 +85,63 @@ class ServiceLocator(object):
                 os.path.join(_cd, '*.py'))
         ]
 
-        [
-            files.extend(
-                self._find_python_files(
-                    os.path.join(_cd, _chdir)
+        for _chdir in os.listdir(_cd):
+            if os.path.isdir(
+                os.path.join(_cd, _chdir)
+            ):
+                files.extend(
+                    self._find_python_files(
+                        os.path.join(_cd, _chdir)
+                    )
                 )
-            )
-            for _chdir in os.listdir(_cd)
-            if os.path.isdir(os.path.join(_cd, _chdir))
-        ]
 
         return files
 
     def _import_classes(self, location):
-        path, filename = os.path.split(location)
-        module_name = os.path.splitext(filename)[0]
+        fp, classes = None, []
 
         try:
+            path, filename = os.path.split(location)
+            module_name = os.path.splitext(filename)[0]
+
             fp, imp_loc, desc = imp.find_module(
                 module_name, [path]
             )
         except ImportError:
-            return []
-
-        try:
+            pass
+        except Exception:
+            raise
+        else:
             try:
                 module = imp.load_module(
                     module_name, fp, imp_loc, desc
                 )
+
+                classes.extend(
+                    cls for _, cls in inspect.getmembers(
+                        module,
+                        predicate=inspect.isclass
+                    )
+                )
             except Exception:
-                return []
+                pass
         finally:
             if fp:
                 fp.close()
 
-        return [
-            cls for _, cls in
-            inspect.getmembers(
-                module, predicate=inspect.isclass
-            )
-        ]
+        return classes
+
+    @classmethod
+    def get_aut(
+            cls,
+            plugin=Plugins.Web
+    ):
+        if not cls._aut:
+            cls._inspect_aut(plugin)
+
+        assert cls._aut is not None
+
+        return cls._aut
 
     @classmethod
     def get_control(
@@ -150,7 +153,7 @@ class ServiceLocator(object):
             raise TypeError('Unsupported Control Type')
 
         if not cls._controls:
-            ServiceLocator(plugin)
+            cls._inspect_controls(plugin)
 
         control = cls._controls.get(control_type, None)
 
@@ -162,3 +165,42 @@ class ServiceLocator(object):
             )
 
         return control
+
+    @classmethod
+    def _inspect_aut(cls, plugin):
+        ServiceLocator._aut = cls._get_instance_by_plugin_type(
+            plugin
+        ).app_under_test
+
+    @classmethod
+    def _inspect_controls(cls, plugin):
+        _instance = cls._get_instance_by_plugin_type(plugin)
+
+        for control in _instance.controls:
+            for func, key in {
+                lambda ctrl: issubclass(ctrl, Button):
+                    Controls.Button,
+                # lambda ctrl: issubclass(ctrl, TextBox):
+                #     Controls.TextBox
+            }.iteritems():
+                if func(control):
+                    ServiceLocator._controls[key] = control
+                    break
+
+    @classmethod
+    def _get_instance_by_plugin_type(cls, plugin):
+        if not ServiceLocator._plugins:
+            ServiceLocator()
+
+        cls_plugin = ServiceLocator._plugins.get(
+            plugin, None
+        )
+
+        if cls_plugin is None:
+            raise TypeError(
+                'Unable to load {} plugin'.format(
+                    plugin
+                )
+            )
+
+        return cls_plugin()

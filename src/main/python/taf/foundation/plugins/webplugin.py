@@ -32,3 +32,7 @@ class WebPlugin(object):
         raise NotImplementedError(
             'The browser instance'
         )
+
+    @property
+    def app_under_test(self):
+        return self.browser
