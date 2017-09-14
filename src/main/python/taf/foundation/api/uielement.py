@@ -11,3 +11,24 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
+
+class UIElement(object):
+    def __init__(self, element=None):
+        self._parent = getattr(
+            element, 'parent', None
+        )
+        self._current = getattr(
+            element, 'current', None
+        )
+
+    def exists(self, timeout=30):
+        return self._current is not None
+
+    @property
+    def parent(self):
+        return self._parent
+
+    @property
+    def current(self):
+        return self._current

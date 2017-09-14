@@ -1,6 +1,5 @@
 plugins:
     web:
         name                : SeleniumPlugin
-        location            : ../plugins/selenium
-        package             : taf.plugins.selenium
+        location            : ../plugins/web/selenium
         enabled             : True

@@ -18,10 +18,10 @@ import inspect
 import os
 
 from taf.foundation.api.controls import Button
+from taf.foundation.api.plugins import WebPlugin
 from taf.foundation.conf import Configuration
 from taf.foundation.enums import Controls
 from taf.foundation.enums import Plugins
-from taf.foundation.plugins import WebPlugin
 
 
 class ServiceLocator(object):
@@ -56,7 +56,7 @@ class ServiceLocator(object):
                                     cls_ is not WebPlugin
                         ): Plugins.Web,
                         # lambda cls_: issubclass(cls_, DesktopPlugin) and (
-                        #             cls_ is not WebPlugin
+                        #             cls_ is not DesktopPlugin
                         # ): Plugins.Desktop,
                     }.iteritems():
                         if func(cls):
@@ -87,7 +87,7 @@ class ServiceLocator(object):
 
         for _chdir in os.listdir(_cd):
             if os.path.isdir(
-                os.path.join(_cd, _chdir)
+                    os.path.join(_cd, _chdir)
             ):
                 files.extend(
                     self._find_python_files(
@@ -107,8 +107,6 @@ class ServiceLocator(object):
             fp, imp_loc, desc = imp.find_module(
                 module_name, [path]
             )
-        except ImportError:
-            pass
         except Exception:
             raise
         else:
@@ -123,6 +121,8 @@ class ServiceLocator(object):
                         predicate=inspect.isclass
                     )
                 )
+            except (ValueError, ImportError):
+                raise
             except Exception:
                 pass
         finally:
@@ -132,7 +132,7 @@ class ServiceLocator(object):
         return classes
 
     @classmethod
-    def get_aut(
+    def get_app_under_test(
             cls,
             plugin=Plugins.Web
     ):
@@ -144,7 +144,7 @@ class ServiceLocator(object):
         return cls._aut
 
     @classmethod
-    def get_control(
+    def get_modeled_control(
             cls,
             control_type,
             plugin=Plugins.Web

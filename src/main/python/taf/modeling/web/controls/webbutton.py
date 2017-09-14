@@ -18,7 +18,7 @@ from taf.foundation.enums import Controls
 
 
 class WebButton(
-    ServiceLocator.get_control(
+    ServiceLocator.get_modeled_control(
         Controls.Button
     ), Button
 ):

@@ -13,4 +13,4 @@
 # limitations under the License.
 
 from .aut import AUT
-from .browser import Browser
+from .uielement import UIElement

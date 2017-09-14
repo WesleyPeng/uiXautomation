@@ -12,21 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from .aut import AUT
+from taf.foundation.api.plugins import WebPlugin
+from taf.foundation.plugins.web.selenium.browser import Browser
+from taf.foundation.plugins.web.selenium.controls import Button
 
 
-class Browser(AUT):
-    def __init__(
-            self,
-            name='firefox',
-            identifier=None
-    ):
-        self.name = name
-        self.id = identifier
+class SeleniumPlugin(WebPlugin):
+    @property
+    def controls(self):
+        return [Button, ]
 
-    @staticmethod
-    def launch(app_location, **kwargs):
-        pass
-
-    def close(self):
-        pass
+    @property
+    def browser(self):
+        return Browser

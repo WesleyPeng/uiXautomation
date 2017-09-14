@@ -14,33 +14,34 @@
 
 from unittest import TestCase
 
-from taf.foundation import ServiceLocator
-from taf.foundation.api.controls import Button
-from taf.foundation.api.web import Browser
-from taf.foundation.enums import Controls
+from taf.foundation.plugins.web.selenium.browser import Browser as SeBrowser
+from taf.foundation.plugins.web.selenium.controls import Button as SeButton
+from taf.modeling.web import Browser, WebButton
 
 
-class TestServiceLocator(TestCase):
-    def setUp(self):
-        self.conf = ServiceLocator()
-
-    def test_browser(self):
-        browser = self.conf.get_app_under_test()
-        self.assertIsNot(
-            browser, Browser
-        )
+class TestModelingTypes(TestCase):
+    def test_web_browser(self):
         self.assertTrue(
-            issubclass(browser, Browser)
+            issubclass(
+                Browser,
+                SeBrowser
+            )
         )
 
-    def test_modeled_button(self):
-        button = self.conf.get_modeled_control(
-            Controls.Button
+        self.assertIsInstance(
+            Browser(),
+            SeBrowser
         )
 
-        self.assertIsNot(
-            button, Button
-        )
+    def test_web_button(self):
         self.assertTrue(
-            issubclass(button, Button)
+            issubclass(
+                WebButton,
+                SeButton
+            )
+        )
+
+        self.assertIsInstance(
+            WebButton(),
+            SeButton
         )

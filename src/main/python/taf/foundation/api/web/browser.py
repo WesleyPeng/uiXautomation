@@ -11,3 +11,22 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
+from taf.foundation.api import AUT
+
+
+class Browser(AUT):
+    def __init__(
+            self,
+            name='firefox',
+            identifier=None
+    ):
+        self.name = name
+        self.id = identifier
+
+    @staticmethod
+    def launch(app_location, **kwargs):
+        pass
+
+    def close(self):
+        pass

@@ -12,8 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from taf.foundation.api import Browser as IBrowser
+from taf.foundation import ServiceLocator
+from taf.foundation.api.web import Browser as IBrowser
 
 
-class Browser(IBrowser):
+class Browser(
+    ServiceLocator.get_app_under_test(),
+    IBrowser  # for IDE intellisense only
+):
     pass
