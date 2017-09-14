@@ -14,7 +14,7 @@
 
 import yaml
 
-from taf.common.api.io import Serializable
+from taf.foundation.api.io import Serializable
 
 
 class YAMLData(yaml.YAMLObject, Serializable):
@@ -49,18 +49,18 @@ class YAMLData(yaml.YAMLObject, Serializable):
     def __iadd__(self, other):
         _data = self.normalize_data(other)
 
-        if isinstance(_data, type(self)):
-            for key, value in vars(_data).iteritems():
-                vars(self).update(
-                    **{
-                        key: value
-                    }
-                )
-        else:
+        if not isinstance(_data, type(self)):
             raise ValueError(
                 'Assigning invalid value: ({})'.format(
                     other
                 )
+            )
+
+        for key, value in vars(_data).iteritems():
+            vars(self).update(
+                **{
+                    key: value
+                }
             )
 
         return self
@@ -109,20 +109,11 @@ class YAMLData(yaml.YAMLObject, Serializable):
             return YAMLData(**data)
 
         if hasattr(data, '__iter__'):
-            _data = []
+            return [
+                cls.normalize_data(datum)
+                for datum in data
+            ]
 
-            for datum in data:
-                _data.append(
-                    cls.normalize_data(datum)
-                )
-
-            return _data
-
-        try:
-            _data = yaml.safe_load(
-                yaml.safe_dump(data)
-            )
-        except Exception:
-            raise
-
-        return _data
+        return yaml.safe_load(
+            yaml.safe_dump(data)
+        )
