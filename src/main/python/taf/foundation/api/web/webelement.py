@@ -13,8 +13,12 @@
 # limitations under the License.
 
 from taf.foundation.api import UIElement
+from .page import Page
 
 
 class WebElement(UIElement):
     def __init__(self, element=None):
         super(WebElement, self).__init__(element)
+
+        if not self._parent:
+            self._parent = Page()

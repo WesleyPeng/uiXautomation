@@ -12,14 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from enum import Enum
+from .browser import Browser
 
 
-class Plugins(str, Enum):
-    WEB = 'web'
-    DESKTOP = 'desktop'
-    MOBILE = 'mobile'
-    CLI = 'cli'
-    SOAP = 'soap'
-    REST = 'rest'
-    UNKNOWN = 'unknown'
+class Page(object):
+    def __init__(self, parent=None):
+        if parent:
+            self._parent = parent
+        elif Browser.cache:
+            self._parent = Browser.cache.current
+        else:
+            raise RuntimeError('Web browser is required')
+
+    @property
+    def parent(self):
+        return self._parent
