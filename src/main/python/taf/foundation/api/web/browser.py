@@ -24,12 +24,12 @@ class Browser(AUT):
             name='firefox',
             identifier=None
     ):
-        self.cache = ConnectionCache(
+        Browser.cache = ConnectionCache(
             identifier
         )
 
         self.name = name
-        self.id = self.cache.register(
+        self.id = Browser.cache.register(
             self._create_instance(self.name),
             identifier
         )
@@ -42,7 +42,7 @@ class Browser(AUT):
 
     def close(self):
         self.cache.close(self.id)
-        self.cache = None
+        Browser.cache = None
 
     def _create_instance(
             self,

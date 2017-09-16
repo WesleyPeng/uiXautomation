@@ -22,7 +22,7 @@ class ConnectionCache(object):
     closed = set()
 
     def __init__(self, identifier=None):
-        self.current_key = self._normalize_id(
+        ConnectionCache.current_key = self._normalize_id(
             identifier
         )
 
@@ -55,7 +55,7 @@ class ConnectionCache(object):
                 'Unknown key:{}'.format(key)
             )
         else:
-            self.current_key = key
+            ConnectionCache.current_key = key
 
         return self.conns.get(key)
 
@@ -69,15 +69,16 @@ class ConnectionCache(object):
         finally:
             if self.conns:
                 if key == self.current_key:
-                    self.current_key = self.conns.keys()[-1]
+                    ConnectionCache.current_key = \
+                        self.conns.keys()[-1]
             else:
-                self.current_key = None
+                ConnectionCache.current_key = None
 
     def close_all(self):
         for key in self.conns:
             self.close(key)
 
-        self.closed.clear()
+        ConnectionCache.closed.clear()
 
     @classmethod
     def _unregister(cls, key):

@@ -20,6 +20,13 @@ from taf.modeling.web import Browser, WebButton
 
 
 class TestModelingTypes(TestCase):
+    def setUp(self):
+        self.browser = Browser()
+
+    def tearDown(self):
+        self.browser.close()
+        del self.browser
+
     def test_web_browser(self):
         self.assertTrue(
             issubclass(
@@ -29,7 +36,7 @@ class TestModelingTypes(TestCase):
         )
 
         self.assertIsInstance(
-            Browser(),
+            self.browser,
             SeBrowser
         )
 
@@ -41,6 +48,7 @@ class TestModelingTypes(TestCase):
             )
         )
 
+        self.browser.launch('http://www.bing.com')
         self.assertIsInstance(
             WebButton(),
             SeButton
