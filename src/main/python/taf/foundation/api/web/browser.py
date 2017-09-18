@@ -13,20 +13,43 @@
 # limitations under the License.
 
 from taf.foundation.api import AUT
+from taf.foundation.utils import ConnectionCache
 
 
 class Browser(AUT):
+    cache = None
+
     def __init__(
             self,
             name='firefox',
             identifier=None
     ):
+        Browser.cache = ConnectionCache(
+            identifier
+        )
+
         self.name = name
-        self.id = identifier
+        self.id = Browser.cache.register(
+            self._create_instance(self.name),
+            identifier
+        )
 
     @staticmethod
-    def launch(app_location, **kwargs):
-        pass
+    def launch(url='about:blank', **kwargs):
+        raise NotImplementedError(
+            'Web browser navigates to specific page'
+        )
 
     def close(self):
-        pass
+        self.cache.close(self.id)
+        Browser.cache = None
+
+    def _create_instance(
+            self,
+            browser_type
+    ):
+        raise NotImplementedError(
+            'Create web browser instance (type={})'.format(
+                browser_type
+            )
+        )

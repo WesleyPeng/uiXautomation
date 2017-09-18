@@ -12,8 +12,54 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from selenium import webdriver
+
 from taf.foundation.api.web import Browser as IBrowser
 
 
 class Browser(IBrowser):
-    pass
+    def __init__(
+            self,
+            name='firefox',
+            identifier=None
+    ):
+        super(Browser, self).__init__(
+            name, identifier
+        )
+
+    @staticmethod
+    def launch(url='about:blank', **kwargs):
+        if not Browser.cache:
+            Browser(
+                kwargs.get('type'),
+                kwargs.get('id')
+            )
+
+        Browser.cache.current.get(url)
+
+    def _create_instance(self, browser_type):
+        _browser_creation_strategies = {
+            'ff': self._make_firefox,
+            'firefox': self._make_firefox,
+            'googlechrome': self._make_chrome,
+            'chrome': self._make_chrome,
+            'gc': self._make_chrome,
+        }
+
+        _creator = _browser_creation_strategies.get(
+            browser_type.lower()
+        )
+
+        if not callable(_creator):
+            raise ValueError('Unsupported browser type')
+
+        _instance = _creator()
+        _instance.get('about:blank')
+
+        return _instance
+
+    def _make_firefox(self):
+        return webdriver.Firefox()
+
+    def _make_chrome(self):
+        return webdriver.Chrome

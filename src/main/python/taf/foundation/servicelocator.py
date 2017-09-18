@@ -54,10 +54,10 @@ class ServiceLocator(object):
                     for func, key in {
                         lambda cls_: issubclass(cls_, WebPlugin) and (
                                     cls_ is not WebPlugin
-                        ): Plugins.Web,
+                        ): Plugins.WEB,
                         # lambda cls_: issubclass(cls_, DesktopPlugin) and (
                         #             cls_ is not DesktopPlugin
-                        # ): Plugins.Desktop,
+                        # ): Plugins.DESKTOP,
                     }.iteritems():
                         if func(cls):
                             ServiceLocator._plugins[key] = cls
@@ -134,7 +134,7 @@ class ServiceLocator(object):
     @classmethod
     def get_app_under_test(
             cls,
-            plugin=Plugins.Web
+            plugin=Plugins.WEB
     ):
         if not cls._aut:
             cls._inspect_aut(plugin)
@@ -147,7 +147,7 @@ class ServiceLocator(object):
     def get_modeled_control(
             cls,
             control_type,
-            plugin=Plugins.Web
+            plugin=Plugins.WEB
     ):
         if control_type not in Controls:
             raise TypeError('Unsupported Control Type')

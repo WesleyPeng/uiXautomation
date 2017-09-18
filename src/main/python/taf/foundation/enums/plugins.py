@@ -16,9 +16,9 @@ from enum import Enum
 
 
 class Plugins(str, Enum):
-    Web = 'web'
-    Desktop = 'desktop'
-    Mobile = 'mobile'
+    WEB = 'web'
+    DESKTOP = 'desktop'
+    MOBILE = 'mobile'
     CLI = 'cli'
     SOAP = 'soap'
     REST = 'rest'

@@ -23,6 +23,11 @@ class UIElement(object):
         )
 
     def exists(self, timeout=30):
+        """
+        Identify if the UI element is presented
+        :param timeout: Default timeout value in seconds
+        :return: Boolean
+        """
         return self._current is not None
 
     @property

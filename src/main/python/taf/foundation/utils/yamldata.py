@@ -14,7 +14,7 @@
 
 import yaml
 
-from taf.foundation.api.io import Serializable
+from taf.foundation.utils.traits import Serializable
 
 
 class YAMLData(yaml.YAMLObject, Serializable):

@@ -13,5 +13,17 @@
 # limitations under the License.
 
 from .browser import Browser
-from .page import Page
-from .webelement import WebElement
+
+
+class Page(object):
+    def __init__(self, parent=None):
+        if parent:
+            self._parent = parent
+        elif Browser.cache:
+            self._parent = Browser.cache.current
+        else:
+            raise RuntimeError('Web browser is required')
+
+    @property
+    def parent(self):
+        return self._parent
