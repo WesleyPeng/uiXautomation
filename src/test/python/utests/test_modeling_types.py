@@ -49,7 +49,24 @@ class TestModelingTypes(TestCase):
         )
 
         self.browser.launch('http://www.bing.com')
+        btn_go = WebButton(
+            xpath='//input[@id="sb_form_go"]',
+            name='go',
+            tag='input',
+            classname='b_searchboxSubmit'
+        )
         self.assertIsInstance(
-            WebButton(),
+            btn_go,
             SeButton
+        )
+
+        self.assertTrue(
+            btn_go.enabled
+        )
+
+        btn_go_with_id = WebButton(id='sb_form_go')
+
+        self.assertEqual(
+            btn_go.object._id,
+            btn_go_with_id.object._id
         )

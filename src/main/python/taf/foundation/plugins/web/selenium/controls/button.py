@@ -13,8 +13,16 @@
 # limitations under the License.
 
 from taf.foundation.api.controls import Button as IButton
-from taf.foundation.api.web import WebElement
+from taf.foundation.plugins.web.selenium.webelement import WebElement
 
 
 class Button(WebElement, IButton):
-    pass
+    @property
+    def enabled(self):
+        if self.exists():
+            return self.object.is_enabled()
+
+        return False
+
+    def click(self):
+        self.current.click()

@@ -14,12 +14,13 @@
 
 from taf.foundation import ServiceLocator
 from taf.foundation.api.controls import Button
+from taf.foundation.api.web import WebElement
 from taf.foundation.enums import Controls
 
 
 class WebButton(
     ServiceLocator.get_modeled_control(
         Controls.Button
-    ), Button
+    ), WebElement, Button
 ):
     pass
