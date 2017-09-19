@@ -14,3 +14,4 @@
 
 from .browser import Browser
 from .controls import WebButton
+from .controls import WebTextBox

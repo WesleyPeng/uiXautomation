@@ -13,3 +13,4 @@
 # limitations under the License.
 
 from button import Button
+from edit import Edit

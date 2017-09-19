@@ -12,5 +12,23 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from .button import Button
-from .edit import Edit
+from .basepattern import BasePattern
+
+
+class Value(BasePattern):
+    def set(self, value):
+        raise NotImplementedError(
+            'Set new value for the element'
+        )
+
+    @property
+    def value(self):
+        raise NotImplementedError(
+            'Get value of the element'
+        )
+
+    @property
+    def is_read_only(self):
+        raise NotImplementedError(
+            'Element is read only'
+        )

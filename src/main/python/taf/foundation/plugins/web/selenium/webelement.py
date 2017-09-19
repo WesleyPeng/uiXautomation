@@ -29,21 +29,27 @@ class WebElement(IWebElement):
 
     @property
     def parent(self):
-        if self._parent and isinstance(
-                self._parent, Page
-        ):
-            self._parent = self._parent.parent
+        if self._parent:
+            if isinstance(self._parent, Page):
+                self._parent = self._parent.parent
+
+            if isinstance(self._parent, WebElement):
+                self._parent = self._parent.current
 
         return self._parent
 
     def activate(self):
-        if self.parent and isinstance(
-                self._parent, WebDriver
-        ) and self.exists():
-            self._parent.execute_script(
-                'arguments[0].focus();',
-                self.object
-            )
+        if self.parent and self.exists():
+            _driver = self._parent
+
+            if isinstance(self._parent, WebElement):
+                _driver = self._parent.parent
+
+            if isinstance(_driver, WebDriver):
+                _driver.execute_script(
+                    'arguments[0].focus();',
+                    self.object
+                )
 
     def exists(self, timeout=30):
         _visible = False

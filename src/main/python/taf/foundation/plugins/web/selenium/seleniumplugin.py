@@ -15,12 +15,13 @@
 from taf.foundation.api.plugins import WebPlugin
 from taf.foundation.plugins.web.selenium.browser import Browser
 from taf.foundation.plugins.web.selenium.controls import Button
+from taf.foundation.plugins.web.selenium.controls import Edit
 
 
 class SeleniumPlugin(WebPlugin):
     @property
     def controls(self):
-        return [Button, ]
+        return [Button, Edit, ]
 
     @property
     def browser(self):
