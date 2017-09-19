@@ -12,5 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from .button import Button
-from .edit import Edit
+from taf.foundation import ServiceLocator
+from taf.foundation.api.controls import Edit
+from taf.foundation.api.web import WebElement
+from taf.foundation.enums import Controls
+
+
+class WebTextBox(
+    ServiceLocator.get_modeled_control(
+        Controls.TextBox
+    ), WebElement, Edit
+):
+    pass

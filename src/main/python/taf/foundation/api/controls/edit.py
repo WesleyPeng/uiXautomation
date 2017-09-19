@@ -12,5 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from .button import Button
-from .edit import Edit
+from taf.foundation.api.patterns import IText
+from taf.foundation.api.patterns import IValue
+
+
+class Edit(IText, IValue):
+    pass

@@ -13,3 +13,4 @@
 # limitations under the License.
 
 from .webbutton import WebButton
+from .webtextbox import WebTextBox

@@ -16,7 +16,10 @@ from unittest import TestCase
 
 from taf.foundation.plugins.web.selenium.browser import Browser as SeBrowser
 from taf.foundation.plugins.web.selenium.controls import Button as SeButton
-from taf.modeling.web import Browser, WebButton
+from taf.foundation.plugins.web.selenium.controls import Edit as SeEdit
+from taf.modeling.web import Browser
+from taf.modeling.web import WebButton
+from taf.modeling.web import WebTextBox
 
 
 class TestModelingTypes(TestCase):
@@ -40,7 +43,7 @@ class TestModelingTypes(TestCase):
             SeBrowser
         )
 
-    def test_web_button(self):
+    def test_web_controls(self):
         self.assertTrue(
             issubclass(
                 WebButton,
@@ -49,6 +52,17 @@ class TestModelingTypes(TestCase):
         )
 
         self.browser.launch('http://www.bing.com')
+        txt_search = WebTextBox(
+            id='sb_form_q'
+        )
+        self.assertIsInstance(
+            txt_search,
+            SeEdit
+        )
+
+        _value = 'wesleypeng+uiXautomation'
+        txt_search.set(_value)
+
         btn_go = WebButton(
             xpath='//input[@id="sb_form_go"]',
             name='go',
@@ -60,13 +74,20 @@ class TestModelingTypes(TestCase):
             SeButton
         )
 
-        self.assertTrue(
-            btn_go.enabled
-        )
-
         btn_go_with_id = WebButton(id='sb_form_go')
 
         self.assertEqual(
             btn_go.object._id,
             btn_go_with_id.object._id
+        )
+
+        btn_go.click()
+
+        # Smart wait is required here
+        import time
+        time.sleep(5)
+
+        self.assertEquals(
+            txt_search.value,
+            _value
         )

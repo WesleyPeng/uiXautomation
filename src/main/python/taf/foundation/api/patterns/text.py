@@ -12,5 +12,23 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from .button import Button
-from .edit import Edit
+from .basepattern import BasePattern
+
+
+class Text(BasePattern):
+    def get_selection(self):
+        raise NotImplementedError(
+            'Get the selected text of the element'
+        )
+
+    @property
+    def text(self):
+        raise NotImplementedError(
+            'Element visible text'
+        )
+
+    @property
+    def supports_text_selection(self):
+        raise NotImplementedError(
+            'Element supports text selection'
+        )

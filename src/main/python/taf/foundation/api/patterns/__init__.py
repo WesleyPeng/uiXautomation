@@ -13,3 +13,5 @@
 # limitations under the License.
 
 from .invoke import Invoke as IInvoke
+from .text import Text as IText
+from .value import Value as IValue

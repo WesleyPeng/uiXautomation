@@ -25,4 +25,6 @@ class Button(WebElement, IButton):
         return False
 
     def click(self):
-        self.current.click()
+        assert self.enabled, 'NA - disabled element'
+
+        self.object.click()
