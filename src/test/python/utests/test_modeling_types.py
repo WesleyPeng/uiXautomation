@@ -17,9 +17,11 @@ from unittest import TestCase
 from taf.foundation.plugins.web.selenium.browser import Browser as SeBrowser
 from taf.foundation.plugins.web.selenium.controls import Button as SeButton
 from taf.foundation.plugins.web.selenium.controls import Edit as SeEdit
+from taf.foundation.plugins.web.selenium.controls import Link as SeLink
 from taf.modeling.web import Browser
 from taf.modeling.web import WebButton
 from taf.modeling.web import WebTextBox
+from taf.modeling.web import WebLink
 
 
 class TestModelingTypes(TestCase):
@@ -60,9 +62,6 @@ class TestModelingTypes(TestCase):
             SeEdit
         )
 
-        _value = 'wesleypeng+uiXautomation'
-        txt_search.set(_value)
-
         btn_go = WebButton(
             xpath='//input[@id="sb_form_go"]',
             name='go',
@@ -81,6 +80,8 @@ class TestModelingTypes(TestCase):
             btn_go_with_id.object._id
         )
 
+        _value = 'wesleypeng+uiXautomation'
+        txt_search.set(_value)
         btn_go.click()
 
         # Smart wait is required here
@@ -91,3 +92,16 @@ class TestModelingTypes(TestCase):
             txt_search.value,
             _value
         )
+
+        lnk_item = WebLink(
+            xpath='//div[@id="b_content"]/ol[@id="b_results"]/li//a',
+            tag='a',
+        )
+
+        self.assertIsInstance(
+            lnk_item,
+            SeLink
+        )
+
+        lnk_item.click()
+        time.sleep(5)

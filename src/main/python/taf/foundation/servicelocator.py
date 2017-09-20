@@ -19,6 +19,7 @@ import os
 
 from taf.foundation.api.controls import Button
 from taf.foundation.api.controls import Edit
+from taf.foundation.api.controls import Link
 from taf.foundation.api.plugins import WebPlugin
 from taf.foundation.conf import Configuration
 from taf.foundation.enums import Controls
@@ -183,8 +184,8 @@ class ServiceLocator(object):
                     Controls.Button,
                 lambda ctrl: issubclass(ctrl, Edit):
                     Controls.TextBox,
-                # lambda ctrl: issubclass(ctrl, Edit):
-                #     Controls.Label
+                lambda ctrl: issubclass(ctrl, Link):
+                    Controls.Link
             }.iteritems():
                 if func(control):
                     ServiceLocator._controls[key] = control
