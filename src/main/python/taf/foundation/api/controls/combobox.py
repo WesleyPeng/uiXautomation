@@ -12,8 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from .browser import Browser
-from .controls import WebButton
-from .controls import WebComboBox
-from .controls import WebLink
-from .controls import WebTextBox
+from taf.foundation.api.patterns import IExpandCollapse
+from taf.foundation.api.patterns import ISelection
+from taf.foundation.api.patterns import IValue
+
+
+class ComboBox(
+    IExpandCollapse,
+    IValue,
+    ISelection
+):
+    @property
+    def options(self):
+        raise NotImplementedError(
+            'Available options'
+        )

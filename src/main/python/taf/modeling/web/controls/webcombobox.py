@@ -12,8 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from .browser import Browser
-from .controls import WebButton
-from .controls import WebComboBox
-from .controls import WebLink
-from .controls import WebTextBox
+from taf.foundation import ServiceLocator
+from taf.foundation.api.controls import ComboBox
+from taf.foundation.api.web import WebElement
+from taf.foundation.enums import Controls
+
+
+class WebComboBox(
+    ServiceLocator.get_modeled_control(
+        Controls.ComboBox
+    ), WebElement, ComboBox
+):
+    pass

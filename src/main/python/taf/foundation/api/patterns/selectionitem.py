@@ -12,8 +12,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from .browser import Browser
-from .controls import WebButton
-from .controls import WebComboBox
-from .controls import WebLink
-from .controls import WebTextBox
+from .basepattern import BasePattern
+
+
+class SelectionItem(BasePattern):
+    def select(self):
+        raise NotImplementedError(
+            'select item'
+        )
+
+    def deselect(self):
+        raise NotImplementedError(
+            'deselect item'
+        )
+
+    @property
+    def is_selected(self):
+        raise NotImplementedError(
+            'The item is selected'
+        )

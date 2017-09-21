@@ -15,6 +15,7 @@
 from taf.foundation.api.plugins import WebPlugin
 from taf.foundation.plugins.web.selenium.browser import Browser
 from taf.foundation.plugins.web.selenium.controls import Button
+from taf.foundation.plugins.web.selenium.controls import ComboBox
 from taf.foundation.plugins.web.selenium.controls import Edit
 from taf.foundation.plugins.web.selenium.controls import Link
 
@@ -22,7 +23,9 @@ from taf.foundation.plugins.web.selenium.controls import Link
 class SeleniumPlugin(WebPlugin):
     @property
     def controls(self):
-        return [Button, Edit, Link, ]
+        return [
+            Button, ComboBox, Edit, Link,
+        ]
 
     @property
     def browser(self):

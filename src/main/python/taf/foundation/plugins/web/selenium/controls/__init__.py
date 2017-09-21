@@ -13,5 +13,6 @@
 # limitations under the License.
 
 from button import Button
+from combobox import ComboBox
 from edit import Edit
 from link import Link

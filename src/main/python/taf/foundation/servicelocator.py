@@ -18,6 +18,7 @@ import inspect
 import os
 
 from taf.foundation.api.controls import Button
+from taf.foundation.api.controls import ComboBox
 from taf.foundation.api.controls import Edit
 from taf.foundation.api.controls import Link
 from taf.foundation.api.plugins import WebPlugin
@@ -182,10 +183,12 @@ class ServiceLocator(object):
             for func, key in {
                 lambda ctrl: issubclass(ctrl, Button):
                     Controls.Button,
+                lambda ctrl: issubclass(ctrl, ComboBox):
+                    Controls.ComboBox,
                 lambda ctrl: issubclass(ctrl, Edit):
                     Controls.TextBox,
                 lambda ctrl: issubclass(ctrl, Link):
-                    Controls.Link
+                    Controls.Link,
             }.iteritems():
                 if func(control):
                     ServiceLocator._controls[key] = control

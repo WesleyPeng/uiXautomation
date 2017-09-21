@@ -12,8 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from .browser import Browser
-from .controls import WebButton
-from .controls import WebComboBox
-from .controls import WebLink
-from .controls import WebTextBox
+from .basepattern import BasePattern
+
+
+class Selection(BasePattern):
+    @property
+    def can_select_multiple(self):
+        raise NotImplementedError(
+            'Multi-select supported'
+        )
+
+    @property
+    def is_selection_required(self):
+        raise NotImplementedError(
+            'Select at least one option'
+        )

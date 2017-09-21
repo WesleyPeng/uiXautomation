@@ -12,8 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from .browser import Browser
-from .controls import WebButton
-from .controls import WebComboBox
-from .controls import WebLink
-from .controls import WebTextBox
+from .basepattern import BasePattern
+
+
+class Container(BasePattern):
+    @property
+    def items(self):
+        raise NotImplementedError(
+            'Collection of items'
+        )

@@ -13,5 +13,6 @@
 # limitations under the License.
 
 from .webbutton import WebButton
+from .webcombobox import WebComboBox
 from .weblink import WebLink
 from .webtextbox import WebTextBox

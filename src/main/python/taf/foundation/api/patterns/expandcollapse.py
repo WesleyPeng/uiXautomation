@@ -12,8 +12,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from .browser import Browser
-from .controls import WebButton
-from .controls import WebComboBox
-from .controls import WebLink
-from .controls import WebTextBox
+from .basepattern import BasePattern
+
+
+class ExpandCollapse(BasePattern):
+    @property
+    def state(self):
+        raise NotImplementedError(
+            'Expand/Collapse state'
+        )
+
+    def expand(self):
+        raise NotImplementedError(
+            'Expand'
+        )
+
+    def collapse(self):
+        raise NotImplementedError(
+            'Collapse'
+        )
