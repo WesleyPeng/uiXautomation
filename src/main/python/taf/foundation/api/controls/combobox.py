@@ -12,9 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from .webbutton import WebButton
-from .webcheckbox import WebCheckBox
-from .webcombobox import WebComboBox
-from .weblink import WebLink
-from .webradiogroup import WebRadioGroup
-from .webtextbox import WebTextBox
+from taf.foundation.api.patterns import IExpandCollapse
+from taf.foundation.api.patterns import ISelection
+from taf.foundation.api.patterns import IValue
+
+
+class ComboBox(
+    IExpandCollapse,
+    IValue,
+    ISelection
+):
+    @property
+    def options(self):
+        raise NotImplementedError(
+            'Available options'
+        )

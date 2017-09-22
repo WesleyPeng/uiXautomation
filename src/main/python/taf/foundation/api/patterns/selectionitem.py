@@ -12,9 +12,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from .webbutton import WebButton
-from .webcheckbox import WebCheckBox
-from .webcombobox import WebComboBox
-from .weblink import WebLink
-from .webradiogroup import WebRadioGroup
-from .webtextbox import WebTextBox
+from .basepattern import BasePattern
+
+
+class SelectionItem(BasePattern):
+    def select(self):
+        raise NotImplementedError(
+            'select item'
+        )
+
+    def deselect(self):
+        raise NotImplementedError(
+            'deselect item'
+        )
+
+    @property
+    def is_selected(self):
+        raise NotImplementedError(
+            'The item is selected'
+        )

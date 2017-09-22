@@ -12,6 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from .container import Container as IContainer
+from .expandcollapse import ExpandCollapse as IExpandCollapse
 from .invoke import Invoke as IInvoke
+from .selection import Selection as ISelection
+from .selectionitem import SelectionItem as ISelectionItem
 from .text import Text as IText
+from .toggle import Toggle as IToggle
 from .value import Value as IValue

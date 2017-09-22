@@ -12,9 +12,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from .webbutton import WebButton
-from .webcheckbox import WebCheckBox
-from .webcombobox import WebComboBox
-from .weblink import WebLink
-from .webradiogroup import WebRadioGroup
-from .webtextbox import WebTextBox
+from taf.foundation.api.controls import ListItem as IListItem
+from taf.foundation.plugins.web.selenium.webelement import WebElement
+
+
+class ListItem(WebElement, IListItem):
+    def select(self):
+        if not self.is_selected:
+            self.object.click()
+
+    def deselect(self):
+        if self.is_selected:
+            self.object.click()
+
+    @property
+    def is_selected(self):
+        assert self.exists(), 'N/A - item is not available'
+
+        return self.object.is_selected()

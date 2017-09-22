@@ -15,13 +15,21 @@
 from taf.foundation.api.plugins import WebPlugin
 from taf.foundation.plugins.web.selenium.browser import Browser
 from taf.foundation.plugins.web.selenium.controls import Button
+from taf.foundation.plugins.web.selenium.controls import CheckBox
+from taf.foundation.plugins.web.selenium.controls import ComboBox
 from taf.foundation.plugins.web.selenium.controls import Edit
+from taf.foundation.plugins.web.selenium.controls import Link
+from taf.foundation.plugins.web.selenium.controls import RadioGroup
 
 
 class SeleniumPlugin(WebPlugin):
     @property
     def controls(self):
-        return [Button, Edit, ]
+        return [
+            Button, CheckBox,
+            ComboBox, Edit,
+            Link, RadioGroup,
+        ]
 
     @property
     def browser(self):

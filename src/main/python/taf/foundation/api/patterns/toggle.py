@@ -12,9 +12,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from .webbutton import WebButton
-from .webcheckbox import WebCheckBox
-from .webcombobox import WebComboBox
-from .weblink import WebLink
-from .webradiogroup import WebRadioGroup
-from .webtextbox import WebTextBox
+from .basepattern import BasePattern
+
+
+class Toggle(BasePattern):
+    def toggle(self):
+        raise NotImplementedError(
+            'Toggle status'
+        )
+
+    @property
+    def state(self):
+        raise NotImplementedError(
+            'Get current status'
+        )

@@ -12,9 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from .webbutton import WebButton
-from .webcheckbox import WebCheckBox
-from .webcombobox import WebComboBox
-from .weblink import WebLink
-from .webradiogroup import WebRadioGroup
-from .webtextbox import WebTextBox
+from .basepattern import BasePattern
+
+
+class Selection(BasePattern):
+    @property
+    def can_select_multiple(self):
+        raise NotImplementedError(
+            'Multi-select supported'
+        )
+
+    @property
+    def is_selection_required(self):
+        raise NotImplementedError(
+            'Select at least one option'
+        )
