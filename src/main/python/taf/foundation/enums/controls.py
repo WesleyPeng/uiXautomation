@@ -22,6 +22,6 @@ class Controls(str, Enum):
     TextBox = 'textbox'
     Link = 'link'
     Button = 'button'
-    RadioButton = 'radio'
+    RadioGroup = 'radio'
     CheckBox = 'checkbox'
     ComboBox = 'combobox'

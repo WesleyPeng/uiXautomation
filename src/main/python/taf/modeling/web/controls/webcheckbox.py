@@ -12,8 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from taf.foundation.api.patterns import IContainer
+from taf.foundation import ServiceLocator
+from taf.foundation.api.controls import CheckBox
+from taf.foundation.api.web import WebElement
+from taf.foundation.enums import Controls
 
 
-class Collection(IContainer):
+class WebCheckBox(
+    ServiceLocator.get_modeled_control(
+        Controls.CheckBox
+    ), WebElement, CheckBox
+):
     pass

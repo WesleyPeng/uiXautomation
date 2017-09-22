@@ -12,9 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from .webbutton import WebButton
-from .webcheckbox import WebCheckBox
-from .webcombobox import WebComboBox
-from .weblink import WebLink
-from .webradiogroup import WebRadioGroup
-from .webtextbox import WebTextBox
+from taf.foundation.api.patterns import IToggle
+
+
+class CheckBox(IToggle):
+    def tick(self):
+        raise NotImplementedError(
+            'Tick the element'
+        )
+
+    def untick(self):
+        raise NotImplementedError(
+            'Un-tick the element'
+        )
