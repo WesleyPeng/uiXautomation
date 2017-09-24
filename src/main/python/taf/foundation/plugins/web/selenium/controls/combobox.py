@@ -43,6 +43,8 @@ class ComboBox(WebElement, IComboBox):
             self, element, **conditions
         )
 
+        self._options = []
+
     def set(self, value):
         if isinstance(value, (list, tuple)):
             if not self.can_select_multiple:
@@ -73,13 +75,16 @@ class ComboBox(WebElement, IComboBox):
     @property
     def value(self):
         if self.exists():
-            return self.object.get_attribute('value')
+            for opt in self.options:
+                if opt.is_selected:
+                    return opt.object.text
 
         return r''
 
     @property
     def options(self):
-        _options = []
+        if self._options:
+            return self._options
 
         if self.exists():
             for element in ElementFinder(
@@ -88,11 +93,11 @@ class ComboBox(WebElement, IComboBox):
                 FindBy.TAG,
                 self._option_tag
             ):
-                _options.append(
+                self._options.append(
                     ListItem(element, parent=self)
                 )
 
-        return _options
+        return self._options
 
     @property
     def is_read_only(self):

@@ -20,8 +20,8 @@ from taf.foundation.plugins.web.selenium.controls import Edit as SeEdit
 from taf.foundation.plugins.web.selenium.controls import Link as SeLink
 from taf.modeling.web import Browser
 from taf.modeling.web import WebButton
-from taf.modeling.web import WebTextBox
 from taf.modeling.web import WebLink
+from taf.modeling.web import WebTextBox
 
 
 class TestModelingTypes(TestCase):
