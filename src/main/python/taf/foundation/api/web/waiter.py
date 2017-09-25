@@ -12,7 +12,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from .browser import Browser
-from .page import Page
-from .waiter import Waiter
-from .webelement import WebElement
+from taf.foundation.utils import ConnectionCache
+
+
+class Waiter(object):
+    def __init__(
+            self,
+            waiter=None,
+            timeout=None
+    ):
+        self.waiter = waiter or ConnectionCache().current
+        self.timeout = timeout or 30
+
+    def wait(self, timeout=None):
+        raise NotImplementedError(
+            'Waits until the target is fully loaded'
+        )

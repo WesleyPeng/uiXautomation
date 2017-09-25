@@ -45,6 +45,15 @@ class TestModelingTypes(TestCase):
             SeBrowser
         )
 
+        another_browser = Browser(identifier='another')
+        another_browser.launch('http://www.microsoft.com')
+
+        self.browser.activate()
+        self.browser.launch('http://www.bing.com')
+        self.browser.maximize()
+
+        another_browser.close()
+
     def test_web_controls(self):
         self.assertTrue(
             issubclass(
@@ -54,6 +63,8 @@ class TestModelingTypes(TestCase):
         )
 
         self.browser.launch('http://www.bing.com')
+        self.browser.maximize()
+
         txt_search = WebTextBox(
             id='sb_form_q'
         )
@@ -84,10 +95,6 @@ class TestModelingTypes(TestCase):
         txt_search.set(_value)
         btn_go.click()
 
-        # Smart wait is required here
-        import time
-        time.sleep(5)
-
         self.assertEquals(
             txt_search.value,
             _value
@@ -104,4 +111,3 @@ class TestModelingTypes(TestCase):
         )
 
         lnk_item.click()
-        time.sleep(5)

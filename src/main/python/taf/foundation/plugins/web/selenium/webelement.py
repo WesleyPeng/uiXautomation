@@ -19,6 +19,8 @@ from taf.foundation.api.web import Page
 from taf.foundation.api.web import WebElement as IWebElement
 from taf.foundation.plugins.web.selenium.support import ElementFinder
 from taf.foundation.plugins.web.selenium.support import FindBy
+from taf.foundation.plugins.web.selenium.support.elementwaiter import \
+    ElementWaiter
 
 
 class WebElement(IWebElement):
@@ -39,20 +41,21 @@ class WebElement(IWebElement):
         return self._parent
 
     def activate(self):
-        if self.parent and self.exists():
-            _driver = self._parent
-
-            if isinstance(self._parent, WebElement):
-                _driver = self._parent.parent
-
-            if isinstance(_driver, WebDriver):
-                _driver.execute_script(
-                    'arguments[0].focus();',
-                    self.object
-                )
+        if self.exists():
+            self._get_web_driver().execute_script(
+                'arguments[0].focus();',
+                self.object
+            )
 
     def exists(self, timeout=30):
         _visible = False
+
+        try:
+            ElementWaiter(
+                self._get_web_driver(), timeout
+            ).wait()
+        except:
+            pass
 
         try:
             _visible = self.current.is_displayed()
@@ -85,3 +88,16 @@ class WebElement(IWebElement):
 
     def _build_element_finder(self):
         return ElementFinder(self.parent).find_element
+
+    def _get_web_driver(self):
+        _driver = self.parent
+
+        if isinstance(self._parent, WebElement):
+            _driver = self._parent.parent
+
+        if isinstance(_driver, WebDriver):
+            return _driver
+        else:
+            raise ValueError(
+                'Unable to identify the web driver'
+            )
