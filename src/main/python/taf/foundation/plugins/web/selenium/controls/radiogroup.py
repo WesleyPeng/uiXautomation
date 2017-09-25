@@ -15,13 +15,14 @@
 from collections import namedtuple
 
 from taf.foundation.api.controls import RadioGroup as IRadioGroup
+from taf.foundation.plugins.web.selenium.controls.edit import Edit
 from taf.foundation.plugins.web.selenium.controls.listitem import ListItem
 from taf.foundation.plugins.web.selenium.support import ElementFinder
 from taf.foundation.plugins.web.selenium.support import FindBy
 from taf.foundation.plugins.web.selenium.webelement import WebElement
 
 RadioButton = namedtuple(
-    'RadioButton', ['name', 'element']
+    'RadioButton', ['option', 'label']
 )
 
 
@@ -29,7 +30,7 @@ class RadioGroup(WebElement, IRadioGroup):
     def __init__(self, element=None, **conditions):
         _arg_tag = 'tag'
         _arg_option = 'option'
-        _arg_opt_label_tag = 'label'
+        _arg_opt_label = 'label'
 
         conditions.setdefault(_arg_tag, 'form')
 
@@ -38,10 +39,10 @@ class RadioGroup(WebElement, IRadioGroup):
         else:
             self._option_tag = 'input'
 
-        if _arg_opt_label_tag in conditions:
-            self._opt_label_tag = conditions.pop(_arg_opt_label_tag)
+        if _arg_opt_label in conditions:
+            self._label_tag = conditions.pop(_arg_opt_label)
         else:
-            self._opt_label_tag = 'label'
+            self._label_tag = _arg_opt_label
 
         WebElement.__init__(
             self, element, **conditions
@@ -53,14 +54,13 @@ class RadioGroup(WebElement, IRadioGroup):
         if str(value).isdigit() and (
                     int(value) < len(self.items)
         ):
-            self.items[int(value)].element.select()
+            self.items[int(value)].option.select()
         else:
             for item in self.items:
                 if (
-                            value == item.element
-                                .current.get_attribute('value')
-                ) or (value == item.name):
-                    item.element.select()
+                            value == item.option.current.get_attribute('value')
+                ) or (value == item.label.text):
+                    item.option.select()
                     break
             else:
                 raise ValueError(
@@ -73,8 +73,8 @@ class RadioGroup(WebElement, IRadioGroup):
     def value(self):
         if self.exists():
             for item in self.items:
-                if item.element.is_selected:
-                    return item.name
+                if item.option.is_selected:
+                    return item.label.text
 
         return r''
 
@@ -84,7 +84,7 @@ class RadioGroup(WebElement, IRadioGroup):
             return self._items
 
         if self.exists():
-            _input_elements = ElementFinder(
+            _options = ElementFinder(
                 self.object
             ).find_elements(
                 FindBy.XPATH,
@@ -92,18 +92,18 @@ class RadioGroup(WebElement, IRadioGroup):
                     self._option_tag
                 )
             )
-            _label_elements = ElementFinder(
+            _labels = ElementFinder(
                 self.object
             ).find_elements(
                 FindBy.XPATH,
-                './/{}'.format(self._opt_label_tag)
+                './/{}'.format(self._label_tag)
             )
 
-            for index, element in enumerate(_input_elements):
+            for index, element in enumerate(_options):
                 self._items.append(
                     RadioButton(
-                        _label_elements[index].text.strip(),
-                        ListItem(element, parent=self)
+                        ListItem(element, parent=self),
+                        Edit(_labels[index], parent=self)
                     )
                 )
 

@@ -75,9 +75,13 @@ class ComboBox(WebElement, IComboBox):
     @property
     def value(self):
         if self.exists():
-            for opt in self.options:
-                if opt.is_selected:
-                    return opt.object.text
+            return ';'.join(
+                [
+                    opt.object.text
+                    for opt in self.options
+                    if opt.is_selected
+                ]
+            )
 
         return r''
 
