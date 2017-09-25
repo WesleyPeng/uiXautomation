@@ -15,6 +15,8 @@
 from selenium import webdriver
 
 from taf.foundation.api.web import Browser as IBrowser
+from taf.foundation.plugins.web.selenium.support.browserwaiter import \
+    BrowserWaiter
 
 
 class Browser(IBrowser):
@@ -36,6 +38,21 @@ class Browser(IBrowser):
             )
 
         Browser.cache.current.get(url)
+
+        BrowserWaiter(
+            Browser.cache.current,
+            kwargs.get('timeout', 30.0)
+        ).wait()
+
+    def activate(self):
+        super(Browser, self).activate()
+
+        self.cache.current.switch_to.window(
+            self.cache.current.current_window_handle
+        )
+
+    def maximize(self):
+        self.cache.current.maximize_window()
 
     def _create_instance(self, browser_type):
         _browser_creation_strategies = {

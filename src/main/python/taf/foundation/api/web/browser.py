@@ -40,9 +40,20 @@ class Browser(AUT):
             'Web browser navigates to specific page'
         )
 
+    def activate(self):
+        if self.id != Browser.cache.current_key:
+            Browser.cache.current_key = self.id
+
+    def maximize(self):
+        raise NotImplementedError(
+            'Maximize the current browser'
+        )
+
     def close(self):
         self.cache.close(self.id)
-        Browser.cache = None
+
+        if not self.cache.current:
+            Browser.cache = None
 
     def _create_instance(
             self,
