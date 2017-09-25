@@ -30,10 +30,9 @@ class CheckBox(WebElement, ICheckBox):
 
     @property
     def state(self):
-        assert self.exists(), 'N/A - invisible element'
+        assert self.exists() and self.object.is_enabled(), \
+            'N/A - invisible/disabled element'
 
-        return self.object.is_enabled() and (
-            'false' != str.lower(
-                self.object.get_attribute('checked')
-            )
-        )
+        _checked = self.object.get_attribute('checked')
+
+        return _checked and ('false' != _checked)
