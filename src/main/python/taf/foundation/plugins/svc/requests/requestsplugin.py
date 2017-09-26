@@ -12,15 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from taf.foundation import ServiceLocator
-from taf.foundation.api.cli import Client
-from taf.foundation.enums import Plugins
+from taf.foundation.api.plugins import RESTPlugin
 
 
-class CLIRunner(
-    ServiceLocator.get_client(
-        Plugins.CLI
-    ),
-    Client
-):
-    pass
+class RequestsPlugin(RESTPlugin):
+    @property
+    def client(self):
+        raise NotImplementedError(
+            'REST Client'
+        )

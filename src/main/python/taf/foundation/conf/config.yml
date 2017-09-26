@@ -7,3 +7,7 @@ plugins:
         name                : ParamikoPlugin
         location            : ../plugins/cli/paramiko
         enabled             : True
+    REST:
+        name                : RequestsPlugin
+        location            : ../plugins/svc/requests
+        enabled             : True

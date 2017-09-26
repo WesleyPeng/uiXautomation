@@ -17,8 +17,8 @@ import imp
 import inspect
 import os
 
-from taf.foundation.api.cli import Client
 from taf.foundation.api.plugins import CLIPlugin
+from taf.foundation.api.plugins import RESTPlugin
 from taf.foundation.api.plugins import WebPlugin
 from taf.foundation.api.ui import AUT
 from taf.foundation.api.ui.controls import Button
@@ -36,7 +36,7 @@ class ServiceLocator(object):
     _plugins = {}
     _aut = None
     _controls = {}
-    _cli_client = None
+    _clients = {}
 
     def __init__(self):
         if not ServiceLocator._plugins:
@@ -83,18 +83,20 @@ class ServiceLocator(object):
         return control
 
     @classmethod
-    def get_cli_client(cls):
-        if not cls._cli_client:
-            ServiceLocator._cli_client = \
-                cls._get_instance_by_plugin_type(
-                    Plugins.CLI
-                ).client
+    def get_client(
+            cls,
+            plugin=Plugins.CLI
+    ):
+        if plugin not in cls._clients:
+            _instance = cls._get_instance_by_plugin_type(
+                plugin
+            )
 
-        assert (cls._cli_client is not None) and issubclass(
-            cls._cli_client, Client
-        )
+            assert hasattr(_instance, 'client')
 
-        return cls._cli_client
+            ServiceLocator._clients[plugin] = _instance.client
+
+        return cls._clients.get(plugin)
 
     def _load_plugins(self):
         _base_dir = os.path.join(
@@ -121,6 +123,9 @@ class ServiceLocator(object):
                         lambda cls_: issubclass(cls_, CLIPlugin) and (
                                     cls_ is not CLIPlugin
                         ): Plugins.CLI,
+                        lambda cls_: issubclass(cls_, RESTPlugin) and (
+                                    cls_ is not RESTPlugin
+                        ): Plugins.REST,
                     }.iteritems():
                         if func(cls):
                             ServiceLocator._plugins[key] = cls
