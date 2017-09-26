@@ -12,9 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from taf.foundation.api.patterns import IContainer
-from taf.foundation.api.patterns import IValue
+from taf.foundation.api.ui.patterns import IToggle
 
 
-class RadioGroup(IValue, IContainer):
-    pass
+class CheckBox(IToggle):
+    def tick(self):
+        raise NotImplementedError(
+            'Tick the element'
+        )
+
+    def untick(self):
+        raise NotImplementedError(
+            'Un-tick the element'
+        )

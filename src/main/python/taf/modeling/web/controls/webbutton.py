@@ -13,8 +13,8 @@
 # limitations under the License.
 
 from taf.foundation import ServiceLocator
-from taf.foundation.api.controls import Button
-from taf.foundation.api.web import WebElement
+from taf.foundation.api.ui.controls import Button
+from taf.foundation.api.ui.web import WebElement
 from taf.foundation.enums import Controls
 
 

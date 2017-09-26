@@ -12,15 +12,4 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from taf.foundation import ServiceLocator
-from taf.foundation.api.ui.controls import Link
-from taf.foundation.api.ui.web import WebElement
-from taf.foundation.enums import Controls
-
-
-class WebLink(
-    ServiceLocator.get_modeled_control(
-        Controls.Link
-    ), WebElement, Link
-):
-    pass
+from sshclient import SSHClient

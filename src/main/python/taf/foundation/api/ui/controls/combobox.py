@@ -12,9 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from taf.foundation.api.patterns import IText
-from taf.foundation.api.patterns import IValue
+from taf.foundation.api.ui.patterns import IExpandCollapse
+from taf.foundation.api.ui.patterns import ISelection
+from taf.foundation.api.ui.patterns import IValue
 
 
-class Edit(IText, IValue):
-    pass
+class ComboBox(
+    IExpandCollapse,
+    IValue,
+    ISelection
+):
+    @property
+    def options(self):
+        raise NotImplementedError(
+            'Available options'
+        )

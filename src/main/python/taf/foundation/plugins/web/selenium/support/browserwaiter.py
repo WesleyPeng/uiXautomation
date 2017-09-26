@@ -15,7 +15,7 @@
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.support.ui import WebDriverWait
 
-from taf.foundation.api.web import Waiter
+from taf.foundation.api.ui.web import Waiter
 
 
 class BrowserWaiter(Waiter):

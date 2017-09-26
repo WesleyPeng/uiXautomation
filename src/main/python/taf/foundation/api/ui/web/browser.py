@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from taf.foundation.api import AUT
+from taf.foundation.api.ui import AUT
 from taf.foundation.utils import ConnectionCache
 
 

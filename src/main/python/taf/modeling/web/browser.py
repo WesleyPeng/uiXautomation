@@ -13,7 +13,7 @@
 # limitations under the License.
 
 from taf.foundation import ServiceLocator
-from taf.foundation.api.web import Browser as IBrowser
+from taf.foundation.api.ui.web import Browser as IBrowser
 
 
 class Browser(

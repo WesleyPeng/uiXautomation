@@ -17,13 +17,16 @@ import imp
 import inspect
 import os
 
-from taf.foundation.api.controls import Button
-from taf.foundation.api.controls import CheckBox
-from taf.foundation.api.controls import ComboBox
-from taf.foundation.api.controls import Edit
-from taf.foundation.api.controls import Link
-from taf.foundation.api.controls import RadioGroup
+from taf.foundation.api.cli import Client
+from taf.foundation.api.plugins import CLIPlugin
 from taf.foundation.api.plugins import WebPlugin
+from taf.foundation.api.ui import AUT
+from taf.foundation.api.ui.controls import Button
+from taf.foundation.api.ui.controls import CheckBox
+from taf.foundation.api.ui.controls import ComboBox
+from taf.foundation.api.ui.controls import Edit
+from taf.foundation.api.ui.controls import Link
+from taf.foundation.api.ui.controls import RadioGroup
 from taf.foundation.conf import Configuration
 from taf.foundation.enums import Controls
 from taf.foundation.enums import Plugins
@@ -33,10 +36,65 @@ class ServiceLocator(object):
     _plugins = {}
     _aut = None
     _controls = {}
+    _cli_client = None
 
     def __init__(self):
         if not ServiceLocator._plugins:
             self._load_plugins()
+
+    @classmethod
+    def get_app_under_test(
+            cls,
+            plugin=Plugins.WEB
+    ):
+        if not cls._aut:
+            ServiceLocator._aut = \
+                cls._get_instance_by_plugin_type(
+                    plugin
+                ).app_under_test
+
+        assert (cls._aut is not None) and issubclass(
+            cls._aut, AUT
+        )
+
+        return cls._aut
+
+    @classmethod
+    def get_modeled_control(
+            cls,
+            control_type,
+            plugin=Plugins.WEB
+    ):
+        if control_type not in Controls:
+            raise TypeError('Unsupported Control Type')
+
+        if not cls._controls:
+            cls._inspect_controls(plugin)
+
+        control = cls._controls.get(control_type, None)
+
+        if not control:
+            raise NotImplementedError(
+                'Control Type - {}'.format(
+                    control_type.name
+                )
+            )
+
+        return control
+
+    @classmethod
+    def get_cli_client(cls):
+        if not cls._cli_client:
+            ServiceLocator._cli_client = \
+                cls._get_instance_by_plugin_type(
+                    Plugins.CLI
+                ).client
+
+        assert (cls._cli_client is not None) and issubclass(
+            cls._cli_client, Client
+        )
+
+        return cls._cli_client
 
     def _load_plugins(self):
         _base_dir = os.path.join(
@@ -60,9 +118,9 @@ class ServiceLocator(object):
                         lambda cls_: issubclass(cls_, WebPlugin) and (
                                     cls_ is not WebPlugin
                         ): Plugins.WEB,
-                        # lambda cls_: issubclass(cls_, DesktopPlugin) and (
-                        #             cls_ is not DesktopPlugin
-                        # ): Plugins.DESKTOP,
+                        lambda cls_: issubclass(cls_, CLIPlugin) and (
+                                    cls_ is not CLIPlugin
+                        ): Plugins.CLI,
                     }.iteritems():
                         if func(cls):
                             ServiceLocator._plugins[key] = cls
@@ -135,47 +193,6 @@ class ServiceLocator(object):
                 fp.close()
 
         return classes
-
-    @classmethod
-    def get_app_under_test(
-            cls,
-            plugin=Plugins.WEB
-    ):
-        if not cls._aut:
-            cls._inspect_aut(plugin)
-
-        assert cls._aut is not None
-
-        return cls._aut
-
-    @classmethod
-    def get_modeled_control(
-            cls,
-            control_type,
-            plugin=Plugins.WEB
-    ):
-        if control_type not in Controls:
-            raise TypeError('Unsupported Control Type')
-
-        if not cls._controls:
-            cls._inspect_controls(plugin)
-
-        control = cls._controls.get(control_type, None)
-
-        if not control:
-            raise NotImplementedError(
-                'Control Type - {}'.format(
-                    control_type.name
-                )
-            )
-
-        return control
-
-    @classmethod
-    def _inspect_aut(cls, plugin):
-        ServiceLocator._aut = cls._get_instance_by_plugin_type(
-            plugin
-        ).app_under_test
 
     @classmethod
     def _inspect_controls(cls, plugin):
