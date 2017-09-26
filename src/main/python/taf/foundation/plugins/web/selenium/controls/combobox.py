@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from taf.foundation.api.controls import ComboBox as IComboBox
+from taf.foundation.api.ui.controls import ComboBox as IComboBox
 from taf.foundation.plugins.web.selenium.controls.listitem import ListItem
 from taf.foundation.plugins.web.selenium.support import ElementFinder
 from taf.foundation.plugins.web.selenium.support import FindBy

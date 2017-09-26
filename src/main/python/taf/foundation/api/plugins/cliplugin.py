@@ -12,15 +12,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from taf.foundation import ServiceLocator
-from taf.foundation.api.ui.controls import Link
-from taf.foundation.api.ui.web import WebElement
-from taf.foundation.enums import Controls
+from .baseplugin import BasePlugin
 
 
-class WebLink(
-    ServiceLocator.get_modeled_control(
-        Controls.Link
-    ), WebElement, Link
-):
-    pass
+class CLIPlugin(object):
+    __metaclass__ = BasePlugin
+
+    def __init__(self):
+        super(CLIPlugin, self).__init__()
+
+    @property
+    def client(self):
+        raise NotImplementedError(
+            'CLI Client'
+        )

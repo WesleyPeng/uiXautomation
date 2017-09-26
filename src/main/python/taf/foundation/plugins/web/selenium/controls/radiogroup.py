@@ -14,7 +14,7 @@
 
 from collections import namedtuple
 
-from taf.foundation.api.controls import RadioGroup as IRadioGroup
+from taf.foundation.api.ui.controls import RadioGroup as IRadioGroup
 from taf.foundation.plugins.web.selenium.controls.edit import Edit
 from taf.foundation.plugins.web.selenium.controls.listitem import ListItem
 from taf.foundation.plugins.web.selenium.support import ElementFinder

@@ -15,8 +15,8 @@
 from unittest import TestCase
 
 from taf.foundation import ServiceLocator
-from taf.foundation.api.controls import Button
-from taf.foundation.api.web import Browser
+from taf.foundation.api.ui.controls import Button
+from taf.foundation.api.ui.web import Browser
 from taf.foundation.enums import Controls
 
 

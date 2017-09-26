@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from taf.foundation.api.controls import ListItem as IListItem
+from taf.foundation.api.ui.controls import ListItem as IListItem
 from taf.foundation.plugins.web.selenium.webelement import WebElement
 
 

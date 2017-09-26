@@ -12,9 +12,4 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from taf.foundation.api.patterns import IInvoke
-from taf.foundation.api.patterns import IText
-
-
-class Link(IInvoke, IText):
-    pass
+from .clirunner import CLIRunner

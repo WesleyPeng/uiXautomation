@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from taf.foundation.api.controls import Link as ILink
+from taf.foundation.api.ui.controls import Link as ILink
 from taf.foundation.plugins.web.selenium.webelement import WebElement
 
 

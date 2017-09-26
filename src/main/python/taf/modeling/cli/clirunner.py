@@ -13,14 +13,11 @@
 # limitations under the License.
 
 from taf.foundation import ServiceLocator
-from taf.foundation.api.ui.controls import Link
-from taf.foundation.api.ui.web import WebElement
-from taf.foundation.enums import Controls
+from taf.foundation.api.cli import Client
 
 
-class WebLink(
-    ServiceLocator.get_modeled_control(
-        Controls.Link
-    ), WebElement, Link
+class CLIRunner(
+    ServiceLocator.get_cli_client(),
+    Client
 ):
     pass

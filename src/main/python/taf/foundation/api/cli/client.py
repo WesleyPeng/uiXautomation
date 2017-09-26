@@ -12,27 +12,35 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from .baseplugin import BasePlugin
+import socket
 
 
-class WebPlugin(object):
-    __metaclass__ = BasePlugin
-
-    def __init__(self):
-        super(WebPlugin, self).__init__()
-
-    @property
-    def controls(self):
-        raise NotImplementedError(
-            'Web controls'
+class Client(object):
+    def __init__(
+            self,
+            hostname,
+            port=22,
+            username=None,
+            password=None,
+            timeout=30,
+            **kwargs
+    ):
+        kwargs.update(
+            hostname=hostname or socket.gethostname(),
+            port=port or 22,
+            username=username or 'root',
+            password=password,
+            timeout=timeout
         )
 
-    @property
-    def browser(self):
+        self.params = kwargs
+
+    def run_command(self, command, *args):
         raise NotImplementedError(
-            'The browser type'
+            'Run CLI command'
         )
 
-    @property
-    def app_under_test(self):
-        return self.browser
+    def run_commands(self, *commands):
+        raise NotImplementedError(
+            'Run CLI commands'
+        )

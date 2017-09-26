@@ -15,8 +15,8 @@
 from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.remote.webelement import WebElement as SeElement
 
-from taf.foundation.api.web import Page
-from taf.foundation.api.web import WebElement as IWebElement
+from taf.foundation.api.ui.web import Page
+from taf.foundation.api.ui.web import WebElement as IWebElement
 from taf.foundation.plugins.web.selenium.support import ElementFinder
 from taf.foundation.plugins.web.selenium.support import FindBy
 from taf.foundation.plugins.web.selenium.support.elementwaiter import \

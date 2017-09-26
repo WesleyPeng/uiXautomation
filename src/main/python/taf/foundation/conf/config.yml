@@ -3,3 +3,7 @@ plugins:
         name                : SeleniumPlugin
         location            : ../plugins/web/selenium
         enabled             : True
+    cli:
+        name                : ParamikoPlugin
+        location            : ../plugins/cli/paramiko
+        enabled             : True

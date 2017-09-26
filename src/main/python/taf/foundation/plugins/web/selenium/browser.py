@@ -14,7 +14,7 @@
 
 from selenium import webdriver
 
-from taf.foundation.api.web import Browser as IBrowser
+from taf.foundation.api.ui.web import Browser as IBrowser
 from taf.foundation.plugins.web.selenium.support.browserwaiter import \
     BrowserWaiter
 

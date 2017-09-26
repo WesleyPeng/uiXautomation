@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from taf.foundation.api import UIElement
+from taf.foundation.api.ui import UIElement
 from .page import Page
 
 
