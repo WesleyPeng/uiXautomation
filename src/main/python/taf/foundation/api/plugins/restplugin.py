@@ -12,4 +12,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from taf.foundation.plugins.cli.paramiko.sshclient import SSHClient
+from .baseplugin import BasePlugin
+
+
+class RESTPlugin(object):
+    __metaclass__ = BasePlugin
+
+    def __init__(self):
+        super(RESTPlugin, self).__init__()
+
+    @property
+    def client(self):
+        raise NotImplementedError(
+            'REST Client'
+        )

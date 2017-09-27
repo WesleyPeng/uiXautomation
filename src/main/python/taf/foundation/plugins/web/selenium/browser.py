@@ -79,4 +79,35 @@ class Browser(IBrowser):
         return webdriver.Firefox()
 
     def _make_chrome(self):
-        return webdriver.Chrome
+        return webdriver.Chrome()
+
+        # import os
+        # import sys
+        #
+        # _driver_dir = os.path.join(
+        #     os.path.dirname(__file__),
+        #     'support'
+        # )
+        #
+        # _driver_bin_file_path = os.path.join(
+        #     _driver_dir,
+        #     'chromedriver.exe'
+        # )
+        #
+        # if sys.platform.startswith('linux'):
+        #     _def_driver_dir = \
+        #         '/opt/google/chrome/chromedriver'
+        #
+        #     if os.path.exists(_def_driver_dir):
+        #         _driver_bin_file_path = _def_driver_dir
+        #     else:
+        #         _driver_bin_file_path = os.path.join(
+        #             _driver_dir, 'chromedriver'
+        #         )
+        #
+        # os.environ['webdriver.chrome.driver'] = \
+        #     _driver_bin_file_path
+        #
+        # return webdriver.Chrome(
+        #     _driver_bin_file_path
+        # )

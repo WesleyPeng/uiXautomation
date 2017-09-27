@@ -13,4 +13,5 @@
 # limitations under the License.
 
 from .cliplugin import CLIPlugin
+from .restplugin import RESTPlugin
 from .webplugin import WebPlugin
