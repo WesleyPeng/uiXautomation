@@ -12,4 +12,4 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from taf.foundation.plugins.svc.requests.restclient import RESTClient
+from .client import Client

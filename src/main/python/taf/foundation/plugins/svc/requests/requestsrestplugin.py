@@ -12,4 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from taf.foundation.plugins.svc.requests.restclient import RESTClient
+from taf.foundation.api.plugins import RESTPlugin
+from taf.foundation.plugins.svc.requests import RESTClient
+
+
+class RequestsRESTPlugin(RESTPlugin):
+    @property
+    def client(self):
+        return RESTClient

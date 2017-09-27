@@ -12,4 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from taf.foundation.plugins.svc.requests.restclient import RESTClient
+from taf.foundation import ServiceLocator
+from taf.foundation.api.svc.REST import Client
+from taf.foundation.enums import Plugins
+
+
+class RESTClient(
+    ServiceLocator.get_client(
+        Plugins.REST
+    ),
+    Client
+):
+    pass
