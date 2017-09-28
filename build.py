@@ -6,7 +6,7 @@ from pybuilder.core import init, use_plugin
 
 use_plugin('python.core')
 use_plugin('python.install_dependencies')
-use_plugin('python.unittest')
+# use_plugin('python.unittest')
 # use_plugin('python.integrationtest')
 use_plugin('python.distutils')
 
@@ -38,20 +38,20 @@ def initializer(project):
     )
 
     # unit tests
-    project.set_property(
-        'dir_source_unittest_python',
-        'src/test/python/utests'
-    )
-
-    project.set_property(
-        'unittest_module_glob',
-        'test_*'
-    )
-
-    project.set_property(
-        'unittest_test_method_prefix',
-        'test_'
-    )
+    # project.set_property(
+    #     'dir_source_unittest_python',
+    #     'src/test/python/utests'
+    # )
+    #
+    # project.set_property(
+    #     'unittest_module_glob',
+    #     'test_*'
+    # )
+    #
+    # project.set_property(
+    #     'unittest_test_method_prefix',
+    #     'test_'
+    # )
 
     # integration tests
     # project.set_property(
