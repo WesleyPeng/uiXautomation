@@ -1,0 +1,6 @@
+include requirements.txt
+
+include taf/foundation/conf/config.yml
+include taf/foundation/plugins/web/selenium/support/ChromeDriver
+
+recursive-exclude taf *.pyc
