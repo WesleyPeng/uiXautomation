@@ -19,10 +19,11 @@ from taf.foundation.utils import YAMLData
 
 class Configuration(object):
     _instance = None
+    _settings = None
 
     def __init__(self):
         if not Configuration._instance:
-            self._settings = YAMLData.load(
+            Configuration._settings = YAMLData.load(
                 os.path.join(
                     os.path.dirname(__file__),
                     'config.yml'

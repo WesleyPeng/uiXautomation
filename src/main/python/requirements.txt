@@ -1,0 +1,4 @@
+paramiko >= 1.16.0
+PyYAML >= 3.11
+requests >= 2.9.1
+selenium >= 2.48.0
