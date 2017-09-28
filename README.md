@@ -13,3 +13,11 @@ Extensible Test Automation Framework
 * PyYAML (3.11+)
 * requests (2.9.1+)
 * Selenium (2.48.0+)
+
+#### License:
+* Apache License Version 2.0
+
+[![paypal donate][paypal-image]][paypal-url]
+
+[paypal-image]: https://www.paypal.com/en_US/i/btn/btn_donate_SM.gif
+[paypal-url]: https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=pengwei_v@hotmail.com&currency_code=USD&amount=2&return=https://github.com/wesleypeng&item_name=uiXautomation
