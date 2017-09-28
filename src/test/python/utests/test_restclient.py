@@ -15,7 +15,7 @@
 from unittest import TestCase
 
 from taf.foundation.plugins.svc.requests \
-    import RESTClient as requestClient
+    import RESTClient as requestsClient
 from taf.foundation.utils import YAMLData
 from taf.modeling.svc import RESTClient
 
@@ -30,7 +30,7 @@ class TestRESTClient(TestCase):
         ) as client:
             self.assertIsInstance(
                 client,
-                requestClient
+                requestsClient
             )
 
             response = client.get('ip')
