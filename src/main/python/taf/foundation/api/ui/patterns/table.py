@@ -12,12 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from .container import Container as IContainer
-from .expandcollapse import ExpandCollapse as IExpandCollapse
-from .invoke import Invoke as IInvoke
-from .selection import Selection as ISelection
-from .selectionitem import SelectionItem as ISelectionItem
-from .table import Table as ITable
-from .text import Text as IText
-from .toggle import Toggle as IToggle
-from .value import Value as IValue
+from .grid import Grid
+
+
+class Table(Grid):
+    @property
+    def header(self):
+        raise NotImplementedError(
+            'Get collection of elements in the header'
+        )
+
+    @property
+    def foot(self):
+        raise NotImplementedError(
+            'Get collection of elements in the foot'
+        )

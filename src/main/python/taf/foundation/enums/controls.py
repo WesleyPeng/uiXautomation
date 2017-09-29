@@ -17,11 +17,13 @@ from enum import Enum
 
 class Controls(str, Enum):
     Element = 'element'
-    Frame = 'frame'
-    Label = 'label'
-    TextBox = 'textbox'
-    Link = 'link'
     Button = 'button'
-    RadioGroup = 'radio'
     CheckBox = 'checkbox'
     ComboBox = 'combobox'
+    Frame = 'frame'
+    Image = 'image'
+    Label = 'label'
+    Link = 'link'
+    RadioGroup = 'radio'
+    Table = 'table'
+    TextBox = 'textbox'
