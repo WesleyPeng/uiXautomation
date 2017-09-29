@@ -27,6 +27,7 @@ from taf.foundation.api.ui.controls import ComboBox
 from taf.foundation.api.ui.controls import Edit
 from taf.foundation.api.ui.controls import Link
 from taf.foundation.api.ui.controls import RadioGroup
+from taf.foundation.api.ui.controls import Table
 from taf.foundation.conf import Configuration
 from taf.foundation.enums import Controls
 from taf.foundation.enums import Plugins
@@ -217,6 +218,8 @@ class ServiceLocator(object):
                     Controls.Link,
                 lambda ctrl: issubclass(ctrl, RadioGroup):
                     Controls.RadioGroup,
+                lambda ctrl: issubclass(ctrl, Table):
+                    Controls.Table,
             }.iteritems():
                 if func(control):
                     ServiceLocator._controls[key] = control

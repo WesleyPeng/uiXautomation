@@ -19,3 +19,4 @@ from .edit import Edit
 from .link import Link
 from .listitem import ListItem
 from .radiogroup import RadioGroup
+from .table import Table

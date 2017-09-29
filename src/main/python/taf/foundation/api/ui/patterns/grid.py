@@ -12,12 +12,23 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from .container import Container as IContainer
-from .expandcollapse import ExpandCollapse as IExpandCollapse
-from .invoke import Invoke as IInvoke
-from .selection import Selection as ISelection
-from .selectionitem import SelectionItem as ISelectionItem
-from .table import Table as ITable
-from .text import Text as IText
-from .toggle import Toggle as IToggle
-from .value import Value as IValue
+from .basepattern import BasePattern
+
+
+class Grid(BasePattern):
+    def get_cell(self, row, column):
+        raise NotImplementedError(
+            'Get the cell element by location'
+        )
+
+    @property
+    def row_count(self):
+        raise NotImplementedError(
+            'Get row count'
+        )
+
+    @property
+    def column_count(self):
+        raise NotImplementedError(
+            'Get column count'
+        )
