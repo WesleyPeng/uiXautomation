@@ -15,12 +15,11 @@
 from taf.foundation import ServiceLocator
 from taf.foundation.api.ui.controls import RadioGroup
 from taf.foundation.api.ui.web import WebElement
-from taf.foundation.enums import Controls
 
 
 class WebRadioGroup(
     ServiceLocator.get_modeled_control(
-        Controls.RadioGroup
+        RadioGroup
     ), WebElement, RadioGroup
 ):
     pass

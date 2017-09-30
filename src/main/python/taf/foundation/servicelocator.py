@@ -16,69 +16,57 @@ import glob
 import imp
 import inspect
 import os
+from collections import namedtuple
 
 from taf.foundation.api.plugins import CLIPlugin
-from taf.foundation.api.plugins import RESTPlugin
 from taf.foundation.api.plugins import WebPlugin
 from taf.foundation.api.ui import AUT
-from taf.foundation.api.ui.controls import Button
-from taf.foundation.api.ui.controls import CheckBox
-from taf.foundation.api.ui.controls import ComboBox
-from taf.foundation.api.ui.controls import Edit
-from taf.foundation.api.ui.controls import Link
-from taf.foundation.api.ui.controls import RadioGroup
-from taf.foundation.api.ui.controls import Table
 from taf.foundation.conf import Configuration
-from taf.foundation.enums import Controls
-from taf.foundation.enums import Plugins
 
 
 class ServiceLocator(object):
     _plugins = {}
-    _aut = None
-    _controls = {}
     _clients = {}
 
-    def __init__(self):
-        if not ServiceLocator._plugins:
-            self._load_plugins()
+    def __init__(self, plugin_type=WebPlugin):
+        if plugin_type not in ServiceLocator._plugins:
+            self._identify_plugin_by_type(
+                plugin_type
+            )
 
     @classmethod
     def get_app_under_test(
             cls,
-            plugin=Plugins.WEB
+            plugin=WebPlugin
     ):
-        if not cls._aut:
-            ServiceLocator._aut = \
-                cls._get_instance_by_plugin_type(
-                    plugin
-                ).app_under_test
-
-        assert (cls._aut is not None) and issubclass(
-            cls._aut, AUT
+        _instance = cls._get_plugin_instance_by_type(
+            plugin
+        )
+        assert hasattr(
+            _instance, 'app_under_test'
+        ) and issubclass(
+            _instance.app_under_test, AUT
         )
 
-        return cls._aut
+        return _instance.app_under_test
 
     @classmethod
     def get_modeled_control(
             cls,
             control_type,
-            plugin=Plugins.WEB
+            plugin=WebPlugin
     ):
-        if control_type not in Controls:
-            raise TypeError('Unsupported Control Type')
+        _instance = cls._get_plugin_instance_by_type(
+            plugin
+        )
+        assert hasattr(_instance, 'controls')
 
-        if not cls._controls:
-            cls._inspect_controls(plugin)
-
-        control = cls._controls.get(control_type, None)
-
-        if not control:
-            raise NotImplementedError(
-                'Control Type - {}'.format(
-                    control_type.name
-                )
+        for control in _instance.controls:
+            if issubclass(control, control_type):
+                break
+        else:
+            control = namedtuple(
+                control_type.__name__, ['current']
             )
 
         return control
@@ -86,10 +74,10 @@ class ServiceLocator(object):
     @classmethod
     def get_client(
             cls,
-            plugin=Plugins.CLI
+            plugin=CLIPlugin
     ):
         if plugin not in cls._clients:
-            _instance = cls._get_instance_by_plugin_type(
+            _instance = cls._get_plugin_instance_by_type(
                 plugin
             )
 
@@ -99,7 +87,7 @@ class ServiceLocator(object):
 
         return cls._clients.get(plugin)
 
-    def _load_plugins(self):
+    def _identify_plugin_by_type(self, plugin_type):
         _base_dir = os.path.join(
             os.path.dirname(__file__),
             'conf'
@@ -117,20 +105,14 @@ class ServiceLocator(object):
                             )
                         )
                 ):
-                    for func, key in {
-                        lambda cls_: issubclass(cls_, WebPlugin) and (
-                                    cls_ is not WebPlugin
-                        ): Plugins.WEB,
-                        lambda cls_: issubclass(cls_, CLIPlugin) and (
-                                    cls_ is not CLIPlugin
-                        ): Plugins.CLI,
-                        lambda cls_: issubclass(cls_, RESTPlugin) and (
-                                    cls_ is not RESTPlugin
-                        ): Plugins.REST,
-                    }.iteritems():
-                        if func(cls):
-                            ServiceLocator._plugins[key] = cls
-                            break
+                    if issubclass(
+                            cls, plugin_type
+                    ) and cls is not plugin_type:
+                        ServiceLocator._plugins[plugin_type] = cls
+                        break
+
+                if plugin_type in self._plugins:
+                    break
 
     def _inspect_classes(self, plugin_dir):
         classes = []
@@ -201,43 +183,18 @@ class ServiceLocator(object):
         return classes
 
     @classmethod
-    def _inspect_controls(cls, plugin):
-        _instance = cls._get_instance_by_plugin_type(plugin)
+    def _get_plugin_instance_by_type(cls, plugin_type):
+        if plugin_type not in ServiceLocator._plugins:
+            ServiceLocator(plugin_type)
 
-        for control in _instance.controls:
-            for func, key in {
-                lambda ctrl: issubclass(ctrl, Button):
-                    Controls.Button,
-                lambda ctrl: issubclass(ctrl, CheckBox):
-                    Controls.CheckBox,
-                lambda ctrl: issubclass(ctrl, ComboBox):
-                    Controls.ComboBox,
-                lambda ctrl: issubclass(ctrl, Edit):
-                    Controls.TextBox,
-                lambda ctrl: issubclass(ctrl, Link):
-                    Controls.Link,
-                lambda ctrl: issubclass(ctrl, RadioGroup):
-                    Controls.RadioGroup,
-                lambda ctrl: issubclass(ctrl, Table):
-                    Controls.Table,
-            }.iteritems():
-                if func(control):
-                    ServiceLocator._controls[key] = control
-                    break
-
-    @classmethod
-    def _get_instance_by_plugin_type(cls, plugin):
-        if not ServiceLocator._plugins:
-            ServiceLocator()
-
-        cls_plugin = ServiceLocator._plugins.get(
-            plugin, None
+        cls_plugin = cls._plugins.get(
+            plugin_type, None
         )
 
         if cls_plugin is None:
             raise TypeError(
                 'Unable to load {} plugin'.format(
-                    plugin
+                    plugin_type
                 )
             )
 

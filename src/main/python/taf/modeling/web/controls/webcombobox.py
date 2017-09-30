@@ -15,12 +15,11 @@
 from taf.foundation import ServiceLocator
 from taf.foundation.api.ui.controls import ComboBox
 from taf.foundation.api.ui.web import WebElement
-from taf.foundation.enums import Controls
 
 
 class WebComboBox(
     ServiceLocator.get_modeled_control(
-        Controls.ComboBox
+        ComboBox
     ), WebElement, ComboBox
 ):
     pass

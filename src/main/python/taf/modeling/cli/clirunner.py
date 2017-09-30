@@ -14,12 +14,12 @@
 
 from taf.foundation import ServiceLocator
 from taf.foundation.api.cli import Client
-from taf.foundation.enums import Plugins
+from taf.foundation.api.plugins import CLIPlugin
 
 
 class CLIRunner(
     ServiceLocator.get_client(
-        Plugins.CLI
+        CLIPlugin
     ),
     Client
 ):

@@ -15,12 +15,11 @@
 from taf.foundation import ServiceLocator
 from taf.foundation.api.ui.controls import Table
 from taf.foundation.api.ui.web import WebElement
-from taf.foundation.enums import Controls
 
 
 class WebTable(
     ServiceLocator.get_modeled_control(
-        Controls.Table
+        Table
     ), WebElement, Table
 ):
     pass

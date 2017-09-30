@@ -15,12 +15,11 @@
 from taf.foundation import ServiceLocator
 from taf.foundation.api.ui.controls import Link
 from taf.foundation.api.ui.web import WebElement
-from taf.foundation.enums import Controls
 
 
 class WebLink(
     ServiceLocator.get_modeled_control(
-        Controls.Link
+        Link
     ), WebElement, Link
 ):
     pass

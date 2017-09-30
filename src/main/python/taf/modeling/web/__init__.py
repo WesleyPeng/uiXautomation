@@ -18,4 +18,5 @@ from .controls import WebCheckBox
 from .controls import WebComboBox
 from .controls import WebLink
 from .controls import WebRadioGroup
+from .controls import WebTable
 from .controls import WebTextBox
