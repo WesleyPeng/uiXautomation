@@ -16,11 +16,11 @@ import glob
 import imp
 import inspect
 import os
-from collections import namedtuple
 
 from taf.foundation.api.plugins import CLIPlugin
 from taf.foundation.api.plugins import WebPlugin
 from taf.foundation.api.ui import AUT
+from taf.foundation.api.ui import UIElement
 from taf.foundation.conf import Configuration
 
 
@@ -65,8 +65,10 @@ class ServiceLocator(object):
             if issubclass(control, control_type):
                 break
         else:
-            control = namedtuple(
-                control_type.__name__, ['current']
+            control = type(
+                control_type.__name__,
+                (UIElement,),
+                {}
             )
 
         return control
