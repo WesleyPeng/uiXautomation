@@ -13,13 +13,13 @@
 # limitations under the License.
 
 from taf.foundation import ServiceLocator
+from taf.foundation.api.plugins import RESTPlugin
 from taf.foundation.api.svc.REST import Client
-from taf.foundation.enums import Plugins
 
 
 class RESTClient(
     ServiceLocator.get_client(
-        Plugins.REST
+        RESTPlugin
     ),
     Client
 ):

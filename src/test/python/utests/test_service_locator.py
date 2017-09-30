@@ -17,7 +17,6 @@ from unittest import TestCase
 from taf.foundation import ServiceLocator
 from taf.foundation.api.ui.controls import Button
 from taf.foundation.api.ui.web import Browser
-from taf.foundation.enums import Controls
 
 
 class TestServiceLocator(TestCase):
@@ -35,7 +34,7 @@ class TestServiceLocator(TestCase):
 
     def test_modeled_button(self):
         button = self.conf.get_modeled_control(
-            Controls.Button
+            Button
         )
 
         self.assertIsNot(

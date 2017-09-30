@@ -26,7 +26,7 @@ class TestRESTClient(TestCase):
 
     def test_rest_get(self):
         with RESTClient(
-            self.base_url
+                self.base_url
         ) as client:
             self.assertIsInstance(
                 client,

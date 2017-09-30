@@ -17,4 +17,5 @@ from .webcheckbox import WebCheckBox
 from .webcombobox import WebComboBox
 from .weblink import WebLink
 from .webradiogroup import WebRadioGroup
+from .webtable import WebTable
 from .webtextbox import WebTextBox
