@@ -15,8 +15,9 @@
 from collections import namedtuple
 
 from taf.foundation.api.ui.controls import Table as ITable
-from taf.foundation.plugins.web.selenium.support import ElementFinder
-from taf.foundation.plugins.web.selenium.support import FindBy
+from taf.foundation.plugins.web.selenium.support.elementfinder import \
+    ElementFinder
+from taf.foundation.plugins.web.selenium.support.findby import FindBy
 from taf.foundation.plugins.web.selenium.webelement import WebElement
 
 RowItem = namedtuple(

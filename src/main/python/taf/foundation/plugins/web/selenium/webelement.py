@@ -17,10 +17,11 @@ from selenium.webdriver.remote.webelement import WebElement as SeElement
 
 from taf.foundation.api.ui.web import Page
 from taf.foundation.api.ui.web import WebElement as IWebElement
-from taf.foundation.plugins.web.selenium.support import ElementFinder
-from taf.foundation.plugins.web.selenium.support import FindBy
+from taf.foundation.plugins.web.selenium.support.elementfinder import \
+    ElementFinder
 from taf.foundation.plugins.web.selenium.support.elementwaiter import \
     ElementWaiter
+from taf.foundation.plugins.web.selenium.support.findby import FindBy
 
 
 class WebElement(IWebElement):
