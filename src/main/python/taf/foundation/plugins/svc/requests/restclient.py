@@ -1,4 +1,4 @@
-# Copyright 2017 {Flair} WESLEY PENG
+# Copyright (c) 2017-2018 {Flair Inc.} WESLEY PENG
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,10 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from urlparse import urljoin
-
+import urllib3
 from requests.auth import HTTPBasicAuth
-from requests.packages import urllib3
 from requests.sessions import Session
 
 from taf.foundation.api.svc.REST import Client
@@ -113,6 +111,13 @@ class RESTClient(Session, Client):
         )
 
     def _get_resource_uri(self, resource):
+        import sys
+
+        if sys.version_info.major < 3:
+            from urlparse import urljoin
+        else:
+            from urllib.parse import urljoin
+
         return urljoin(
             self.params.get('url'),
             resource

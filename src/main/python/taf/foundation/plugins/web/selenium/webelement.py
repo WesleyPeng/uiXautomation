@@ -1,4 +1,4 @@
-# Copyright 2017 {Flair} WESLEY PENG
+# Copyright (c) 2017-2018 {Flair Inc.} WESLEY PENG
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,10 +17,11 @@ from selenium.webdriver.remote.webelement import WebElement as SeElement
 
 from taf.foundation.api.ui.web import Page
 from taf.foundation.api.ui.web import WebElement as IWebElement
-from taf.foundation.plugins.web.selenium.support import ElementFinder
-from taf.foundation.plugins.web.selenium.support import FindBy
+from taf.foundation.plugins.web.selenium.support.elementfinder import \
+    ElementFinder
 from taf.foundation.plugins.web.selenium.support.elementwaiter import \
     ElementWaiter
+from taf.foundation.plugins.web.selenium.support.findby import FindBy
 
 
 class WebElement(IWebElement):
@@ -70,7 +71,7 @@ class WebElement(IWebElement):
     def _parse_conditions(self, **conditions):
         _conditions = {}
 
-        for key, value in conditions.iteritems():
+        for key, value in conditions.items():
             try:
                 key = FindBy[key.upper()]
             except:
@@ -92,12 +93,17 @@ class WebElement(IWebElement):
     def _get_web_driver(self):
         _driver = self.parent
 
-        if isinstance(self._parent, WebElement):
-            _driver = self._parent.parent
+        _nested_depth = 32
+        while (_nested_depth > 0) and not isinstance(
+                _driver, WebDriver
+        ):
+            _driver = getattr(_driver, 'parent', _driver)
 
-        if isinstance(_driver, WebDriver):
-            return _driver
-        else:
+            _nested_depth -= 1
+
+        if not isinstance(_driver, WebDriver):
             raise ValueError(
                 'Unable to identify the web driver'
             )
+
+        return _driver

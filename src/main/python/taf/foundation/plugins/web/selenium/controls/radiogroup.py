@@ -1,4 +1,4 @@
-# Copyright 2017 {Flair} WESLEY PENG
+# Copyright (c) 2017-2018 {Flair Inc.} WESLEY PENG
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,8 +17,9 @@ from collections import namedtuple
 from taf.foundation.api.ui.controls import RadioGroup as IRadioGroup
 from taf.foundation.plugins.web.selenium.controls.edit import Edit
 from taf.foundation.plugins.web.selenium.controls.listitem import ListItem
-from taf.foundation.plugins.web.selenium.support import ElementFinder
-from taf.foundation.plugins.web.selenium.support import FindBy
+from taf.foundation.plugins.web.selenium.support.elementfinder import \
+    ElementFinder
+from taf.foundation.plugins.web.selenium.support.findby import FindBy
 from taf.foundation.plugins.web.selenium.webelement import WebElement
 
 RadioButton = namedtuple(

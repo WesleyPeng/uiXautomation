@@ -1,4 +1,4 @@
-# Copyright 2017 {Flair} WESLEY PENG
+# Copyright (c) 2017-2018 {Flair Inc.} WESLEY PENG
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ class YAMLData(yaml.YAMLObject, Serializable):
     def __init__(self, **kwargs):
         super(YAMLData, self).__init__()
 
-        for key, value in kwargs.iteritems():
+        for key, value in kwargs.items():
             self.__setattr__(key, value)
 
     def __getattr__(self, item):
@@ -56,7 +56,7 @@ class YAMLData(yaml.YAMLObject, Serializable):
                 )
             )
 
-        for key, value in vars(_data).iteritems():
+        for key, value in vars(_data).items():
             vars(self).update(
                 **{
                     key: value
@@ -67,7 +67,7 @@ class YAMLData(yaml.YAMLObject, Serializable):
 
     def dump(self, path):
         try:
-            for key, value in vars(self).copy().iteritems():
+            for key, value in vars(self).copy().items():
                 if hasattr(value, '__dict__') and (
                         not isinstance(
                             value, yaml.YAMLObject
@@ -89,7 +89,7 @@ class YAMLData(yaml.YAMLObject, Serializable):
             data = dict(
                 errno=ioe.errno,
                 filename=ioe.filename,
-                message=ioe.message,
+                # message=ioe.message,
                 strerror=ioe.strerror
             )
         except Exception:
@@ -105,10 +105,10 @@ class YAMLData(yaml.YAMLObject, Serializable):
         if hasattr(data, '__dict__'):
             return YAMLData(**vars(data))
 
-        if hasattr(data, 'iteritems'):
+        if isinstance(data, dict):
             return YAMLData(**data)
 
-        if hasattr(data, '__iter__'):
+        if isinstance(data, list):
             return [
                 cls.normalize_data(datum)
                 for datum in data

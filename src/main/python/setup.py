@@ -1,4 +1,4 @@
-# Copyright 2017 {Flair} WESLEY PENG
+# Copyright (c) 2017-2018 {Flair Inc.} WESLEY PENG
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -60,7 +60,7 @@ PACKAGES = find_packages(
 
 setup(
     name='PyXTaf',
-    version='0.1.0',
+    version='0.2.0',
     description='Extensible Test Automation Framework',
     long_description=LONG_DESC,
     install_requires=REQUIREMENTS,
