@@ -13,9 +13,9 @@
 # limitations under the License.
 
 import glob
-import imp
 import inspect
 import os
+import sys
 
 from taf.foundation.api.plugins import CLIPlugin
 from taf.foundation.api.plugins import WebPlugin
@@ -97,7 +97,7 @@ class ServiceLocator(object):
 
         for _, plugin in vars(
                 Configuration.get_instance().plugins
-        ).iteritems():
+        ).items():
             if plugin.enabled:
                 for cls in self._inspect_classes(
                         os.path.abspath(
@@ -157,27 +157,36 @@ class ServiceLocator(object):
             path, filename = os.path.split(location)
             module_name = os.path.splitext(filename)[0]
 
-            fp, imp_loc, desc = imp.find_module(
-                module_name, [path]
-            )
-        except Exception:
-            raise
-        else:
-            try:
+            if sys.version_info.major < 3:  # Python2.x
+                import imp
+
+                fp, imp_loc, desc = imp.find_module(
+                    module_name, [path]
+                )
+
                 module = imp.load_module(
                     module_name, fp, imp_loc, desc
                 )
+            else:
+                import importlib.util as imp
 
-                classes.extend(
-                    cls for _, cls in inspect.getmembers(
-                        module,
-                        predicate=inspect.isclass
-                    )
+                spec = imp.spec_from_file_location(
+                    module_name, location
                 )
-            except (ValueError, ImportError):
-                raise
-            except Exception:
-                pass
+
+                module = imp.module_from_spec(spec)
+                spec.loader.exec_module(module)
+
+            classes.extend(
+                cls for _, cls in inspect.getmembers(
+                    module,
+                    predicate=inspect.isclass
+                )
+            )
+        except (ValueError, ImportError):
+            raise
+        except (OSError, IOError):
+            pass
         finally:
             if fp:
                 fp.close()

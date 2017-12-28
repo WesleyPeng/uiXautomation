@@ -60,7 +60,7 @@ PACKAGES = find_packages(
 
 setup(
     name='PyXTaf',
-    version='0.1.0',
+    version='0.2.0',
     description='Extensible Test Automation Framework',
     long_description=LONG_DESC,
     install_requires=REQUIREMENTS,

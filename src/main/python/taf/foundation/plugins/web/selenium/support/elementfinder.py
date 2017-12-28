@@ -49,7 +49,7 @@ class ElementFinder(object):
     ):
         elements = []
 
-        for by, value in conditions.iteritems():
+        for by, value in conditions.items():
             elements = reduce(
                 lambda accum, current:
                 accum if current in accum
@@ -65,7 +65,7 @@ class ElementFinder(object):
         for element in self.find_elements_by_conditions(
                 **conditions
         ):
-            for key, value in conditions.iteritems():
+            for key, value in conditions.items():
                 _attr_value = element.get_attribute(
                     '{}'.format(key)
                 ) or getattr(

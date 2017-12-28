@@ -57,7 +57,7 @@ class ElementWaiter(Waiter):
             'angular': angular_animation_script
         }
 
-        for animation, script in animation_type_script_pairs.iteritems():
+        for animation, script in animation_type_script_pairs.items():
             ret = self.waiter.execute_script(
                 'if (window.{}) return true; else return false;'.format(
                     animation

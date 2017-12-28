@@ -13,7 +13,7 @@
 # limitations under the License.
 
 import json
-from urlparse import urlparse
+import sys
 
 from taf.foundation.utils import YAMLData
 
@@ -28,6 +28,11 @@ class Client(object):
             domain=None,
             **kwargs
     ):
+        if sys.version_info.major < 3:
+            from urlparse import urlparse
+        else:
+            from urllib.urlparse import urlparse
+
         _url = urlparse(base_url)
 
         if port and str(port).strip():
@@ -49,6 +54,14 @@ class Client(object):
         )
 
         self.params = kwargs
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        raise NotImplementedError(
+            'Close connection'
+        )
 
     def get(
             self,
@@ -110,7 +123,7 @@ class Client(object):
                 )
             else:
                 _model = json_string
-        except Exception:
+        except (TypeError, ValueError):
             _model = {}
 
         return _model
@@ -124,7 +137,7 @@ class Client(object):
                 data = vars(data)
 
             if isinstance(data, dict):
-                for key, value in data.iteritems():
+                for key, value in data.items():
                     _json[key] = _iter_encode(value)
             elif isinstance(data, (list, tuple)):
                 _json = [

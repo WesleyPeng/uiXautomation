@@ -22,7 +22,7 @@ default_task = [
 
 @init
 def initializer(project):
-    project.version = '0.1.0'
+    project.version = '0.2.0'
     project.summary = summary
     project.description = __doc__
 

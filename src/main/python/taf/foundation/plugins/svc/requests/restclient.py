@@ -14,8 +14,8 @@
 
 from urlparse import urljoin
 
+import urllib3
 from requests.auth import HTTPBasicAuth
-from requests.packages import urllib3
 from requests.sessions import Session
 
 from taf.foundation.api.svc.REST import Client

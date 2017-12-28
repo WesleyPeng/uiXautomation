@@ -71,7 +71,7 @@ class WebElement(IWebElement):
     def _parse_conditions(self, **conditions):
         _conditions = {}
 
-        for key, value in conditions.iteritems():
+        for key, value in conditions.items():
             try:
                 key = FindBy[key.upper()]
             except:
@@ -93,12 +93,17 @@ class WebElement(IWebElement):
     def _get_web_driver(self):
         _driver = self.parent
 
-        if isinstance(self._parent, WebElement):
-            _driver = self._parent.parent
+        _nested_depth = 32
+        while (_nested_depth > 0) and not isinstance(
+                _driver, WebDriver
+        ):
+            _driver = getattr(_driver, 'parent', _driver)
 
-        if isinstance(_driver, WebDriver):
-            return _driver
-        else:
+            _nested_depth -= 1
+
+        if not isinstance(_driver, WebDriver):
             raise ValueError(
                 'Unable to identify the web driver'
             )
+
+        return _driver
