@@ -12,8 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from urlparse import urljoin
-
 import urllib3
 from requests.auth import HTTPBasicAuth
 from requests.sessions import Session
@@ -113,6 +111,13 @@ class RESTClient(Session, Client):
         )
 
     def _get_resource_uri(self, resource):
+        import sys
+
+        if sys.version_info.major < 3:
+            from urlparse import urljoin
+        else:
+            from urllib.parse import urljoin
+
         return urljoin(
             self.params.get('url'),
             resource

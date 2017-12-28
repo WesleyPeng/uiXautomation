@@ -13,7 +13,6 @@
 # limitations under the License.
 
 import json
-import sys
 
 from taf.foundation.utils import YAMLData
 
@@ -28,10 +27,12 @@ class Client(object):
             domain=None,
             **kwargs
     ):
+        import sys
+
         if sys.version_info.major < 3:
             from urlparse import urlparse
         else:
-            from urllib.urlparse import urlparse
+            from urllib.parse import urlparse
 
         _url = urlparse(base_url)
 
