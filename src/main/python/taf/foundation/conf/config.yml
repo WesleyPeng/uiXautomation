@@ -3,6 +3,10 @@ plugins:
         name                : SeleniumPlugin
         location            : ../plugins/web/selenium
         enabled             : True
+    mobile:
+        name                : AppiumPlugin
+        location            : ../plugins/mobile/appium
+        enabled             : False
     cli:
         name                : ParamikoPlugin
         location            : ../plugins/cli/paramiko
