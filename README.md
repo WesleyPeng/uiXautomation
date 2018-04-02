@@ -33,7 +33,10 @@ We are coming up with a solution of leveraging Docker container to run tests whi
 
 ```bash
 # start services, run tests and build wheel file
-docker-compose run --rm pyXTaf build#
+docker-compose run --rm pyxtaf build#
+
+# stop services and remove local images
+docker-compose down --rmi local --volumes
 ```
 
 #### License:

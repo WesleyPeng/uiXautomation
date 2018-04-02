@@ -13,11 +13,13 @@
 # limitations under the License.
 
 from unittest import TestCase
+from unittest import skip
 
 from taf.foundation.plugins.cli.paramiko import SSHClient
 from taf.modeling.cli import CLIRunner
 
 
+@skip('Temporarily ignore CLI tests')
 class TestCLIRunner(TestCase):
     def setUp(self):
         self.hostname = 'localhost'

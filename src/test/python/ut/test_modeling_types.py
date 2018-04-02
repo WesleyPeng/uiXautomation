@@ -13,6 +13,7 @@
 # limitations under the License.
 
 from unittest import TestCase
+from unittest import skip
 
 from taf.foundation.plugins.web.selenium.browser import Browser as SeBrowser
 from taf.foundation.plugins.web.selenium.controls import Button as SeButton
@@ -24,6 +25,7 @@ from taf.modeling.web import WebLink
 from taf.modeling.web import WebTextBox
 
 
+@skip('Temporarily ignore WebUI tests')
 class TestModelingTypes(TestCase):
     def setUp(self):
         self.browser = Browser()
