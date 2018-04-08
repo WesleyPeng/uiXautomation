@@ -1,0 +1,51 @@
+version: '3'
+services:
+    chrome:
+        image: selenium/node-chrome-debug:latest
+        volumes:
+            - /dev/shm:/dev/shm
+        depends_on:
+            - hub
+        entrypoint: bash -c 'SE_OPTS="-host $$HOSTNAME -port 5500" /opt/bin/entry_point.sh'
+        ports:
+            - "5500:5500"
+        environment:
+            - HUB_PORT_4444_TCP_PORT=4444
+            - HUB_PORT_4444_TCP_ADDR=hub
+        networks:
+            - private
+    firefox:
+        image: selenium/node-firefox-debug:latest
+        volumes:
+            - /dev/shm:/dev/shm
+        depends_on:
+            - hub
+        entrypoint: bash -c 'SE_OPTS="-host $$HOSTNAME -port 5501" /opt/bin/entry_point.sh'
+        ports:
+            - "5501:5501"
+        environment:
+            - HUB_PORT_4444_TCP_PORT=4444
+            - HUB_PORT_4444_TCP_ADDR=hub
+        networks:
+            - private
+    hub:
+        image: selenium/hub:latest
+        ports:
+            - "4444:4444"
+        networks:
+            - private
+    pyxtaf:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        volumes:
+            - ./artifacts:/usr/local/artifacts
+        depends_on:
+            - chrome
+            - firefox
+networks:
+    default:
+        external:
+            name: host
+    private:
+        driver: bridge

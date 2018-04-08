@@ -1,0 +1,28 @@
+dist: trusty
+sudo: required
+
+language: python
+python:
+    - "2.7.10"
+    - "3.6.3"
+
+#virtualenv:
+#    system_site_packages: true
+
+#before_install:
+#    - echo "[egg_info]" >> src/main/python/setup.cfg
+#    - echo "tag_build=${TRAVIS_BUILD_NUMBER}" >> src/main/python/setup.cfg
+
+install:
+    - pip install pybuilder
+    - pip install enum34
+    - pip install paramiko
+    - pip install PyYAML
+    - pip install requests
+    - pip install selenium
+
+script: pyb -v clean publish
+
+#notifications:
+#    email:
+#        - wesley.peng@live.com

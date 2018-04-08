@@ -1,10 +1,14 @@
-# uiXautomation
+# uiXautomation [![Travis Status](https://travis-ci.org/WesleyPeng/uiXautomation.svg?branch=master)](https://travis-ci.org/WesleyPeng/uiXautomation)
 
 ### Overview
 Extensible Test Automation Framework
 
+### Architecture Diagram
+![PyXTaf Diagram](diagram.png?raw=true "PyXTaf Architecture Diagram")
+
 #### Plugins:
-* WEB - Based on _**[Selenium WebDriver](http://www.seleniumhq.org/projects/webdriver/)**_
+* WEB - Based on _**[Selenium WebDriver](http://www.seleniumhq.org/projects/webdriver/)**_  
+[//]: # (* Mobile - Based on _**[appium](http://github.com/appium/appium)**_)
 * CLI - Based on _**[paramiko](https://github.com/paramiko/paramiko)**_
 * REST - Based on _**[requests](https://github.com/requests/requests)**_
 
@@ -13,6 +17,27 @@ Extensible Test Automation Framework
 * PyYAML (3.11+)
 * requests (2.9.1+)
 * Selenium (2.48.0+)
+
+#### Build
+PyBuilder (pyb) is used to build wheel file in the project
+```bash
+# install pybuilder
+pip install pybuilder
+
+# build wheel file without executing tests
+pyb -v -o clean publish
+```
+
+#### Build & Run Tests in Container
+We are coming up with a solution of leveraging Docker container to run tests while building wheel file
+
+```bash
+# start services, run tests and build wheel file
+docker-compose run --rm pyxtaf build#
+
+# stop services and remove local images
+docker-compose down --rmi local --volumes
+```
 
 #### License:
 * Apache License V2.0

@@ -54,7 +54,7 @@ with open(
 
 PACKAGES = find_packages(
     exclude=(
-        'utests',
+        'ut',
     )
 )
 
@@ -65,5 +65,5 @@ setup(
     long_description=LONG_DESC,
     install_requires=REQUIREMENTS,
     packages=PACKAGES,
-    # test_suite='utests'
+    # test_suite='ut'
 )
