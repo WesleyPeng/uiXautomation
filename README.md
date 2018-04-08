@@ -1,4 +1,4 @@
-# uiXautomation
+# uiXautomation [![Travis Status](https://travis-ci.org/WesleyPeng/uiXautomation.svg?branch=master)](https://travis-ci.org/WesleyPeng/uiXautomation)
 
 ### Overview
 Extensible Test Automation Framework
