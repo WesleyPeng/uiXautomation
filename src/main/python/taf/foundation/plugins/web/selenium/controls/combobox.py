@@ -16,7 +16,7 @@ from taf.foundation.api.ui.controls import ComboBox as IComboBox
 from taf.foundation.plugins.web.selenium.controls.listitem import ListItem
 from taf.foundation.plugins.web.selenium.support.elementfinder import \
     ElementFinder
-from taf.foundation.plugins.web.selenium.support.findby import FindBy
+from taf.foundation.plugins.web.selenium.support.locator import Locator
 from taf.foundation.plugins.web.selenium.webelement import WebElement
 
 
@@ -95,7 +95,7 @@ class ComboBox(WebElement, IComboBox):
             for element in ElementFinder(
                     self.object
             ).find_elements(
-                FindBy.TAG,
+                Locator.TAG,
                 self._option_tag
             ):
                 self._options.append(

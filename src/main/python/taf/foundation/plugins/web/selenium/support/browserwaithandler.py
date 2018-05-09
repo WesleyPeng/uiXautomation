@@ -15,17 +15,19 @@
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.support.ui import WebDriverWait
 
-from taf.foundation.api.ui.web import Waiter
+from taf.foundation.api.ui.support import WaitHandler
 
 
-class BrowserWaiter(Waiter):
+class BrowserWaitHandler(WaitHandler):
     def __init__(
             self,
-            waiter=None,
-            timeout=30.0,
+            handler=None,
+            timeout=None,
             poll_frequency=1.0
     ):
-        super(BrowserWaiter, self).__init__(waiter, timeout)
+        super(BrowserWaitHandler, self).__init__(
+            handler, timeout
+        )
 
         self.poll_frequency = poll_frequency or 1.0
 
@@ -40,7 +42,7 @@ class BrowserWaiter(Waiter):
             self.poll_frequency = float(self.poll_frequency)
 
             WebDriverWait(
-                self.waiter,
+                self.handler,
                 self.timeout,
                 self.poll_frequency
             ).until(

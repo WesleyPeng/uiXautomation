@@ -11,15 +11,3 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-from enum import Enum
-
-
-class FindBy(str, Enum):
-    UNKNOWN = 'unknown'
-    ID = 'id'
-    XPATH = 'xpath'
-    NAME = 'name'
-    TAG = 'tag_name'
-    CLASSNAME = 'class'
-    CSS = 'css'

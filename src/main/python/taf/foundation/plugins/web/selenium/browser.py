@@ -12,34 +12,39 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import os
+import sys
+
 from selenium import webdriver
+from selenium.webdriver import Remote as RemoteWebDriver
 
 from taf.foundation.api.ui.web import Browser as IBrowser
-from taf.foundation.plugins.web.selenium.support.browserwaiter import \
-    BrowserWaiter
+from taf.foundation.plugins.web.selenium.support.browserwaithandler import \
+    BrowserWaitHandler
 
 
 class Browser(IBrowser):
     def __init__(
             self,
             name='firefox',
-            identifier=None
+            identifier=None,
+            **kwargs
     ):
         super(Browser, self).__init__(
-            name, identifier
+            name, identifier, **kwargs
         )
 
     @staticmethod
     def launch(url='about:blank', **kwargs):
         if not Browser.cache:
             Browser(
-                kwargs.get('type'),
-                kwargs.get('id')
+                kwargs.get('name'),
+                kwargs.get('identifier')
             )
 
         Browser.cache.current.get(url)
 
-        BrowserWaiter(
+        BrowserWaitHandler(
             Browser.cache.current,
             kwargs.get('timeout', 30.0)
         ).wait()
@@ -54,60 +59,75 @@ class Browser(IBrowser):
     def maximize(self):
         self.cache.current.maximize_window()
 
-    def _create_instance(self, browser_type):
-        _browser_creation_strategies = {
-            'ff': self._make_firefox,
-            'firefox': self._make_firefox,
-            'googlechrome': self._make_chrome,
-            'chrome': self._make_chrome,
-            'gc': self._make_chrome,
-        }
+    def _create_instance(
+            self, name, **kwargs
+    ):
+        kwargs.setdefault('is_remote', False)
 
-        _creator = _browser_creation_strategies.get(
-            browser_type.lower()
-        )
+        is_remote = str(
+            kwargs.pop('is_remote')
+        ).lower() not in ('false', 'no')
 
-        if not callable(_creator):
-            raise ValueError('Unsupported browser type')
+        if is_remote:
+            _instance = RemoteWebDriver(
+                command_executor=kwargs.get(
+                    'command_executor',
+                    'http://{host}:{port}/wd/hub'.format(
+                        host=kwargs.get('host', 'localhost'),
+                        port=kwargs.get('port', 4444)
+                    )
+                )
+            )
+        else:
+            _browser_creation_strategies = {
+                'ff': self._make_firefox,
+                'firefox': self._make_firefox,
+                'googlechrome': self._make_chrome,
+                'chrome': self._make_chrome,
+                'gc': self._make_chrome,
+            }
 
-        _instance = _creator()
-        _instance.get('about:blank')
+            _creator = _browser_creation_strategies.get(
+                name.lower()
+            )
+
+            if not callable(_creator):
+                raise ValueError('Unsupported browser type')
+
+            _instance = _creator(**kwargs)
+            # _instance.get('about:blank')
 
         return _instance
 
-    def _make_firefox(self):
-        return webdriver.Firefox()
+    def _make_firefox(self, **kwargs):
+        return webdriver.Firefox(**kwargs)
 
-    def _make_chrome(self):
-        return webdriver.Chrome()
+    def _make_chrome(self, **kwargs):
+        _driver_dir = os.path.join(
+            os.path.dirname(__file__),
+            'support'
+        )
 
-        # import os
-        # import sys
-        #
-        # _driver_dir = os.path.join(
-        #     os.path.dirname(__file__),
-        #     'support'
-        # )
-        #
-        # _driver_bin_file_path = os.path.join(
-        #     _driver_dir,
-        #     'chromedriver.exe'
-        # )
-        #
-        # if sys.platform.startswith('linux'):
-        #     _def_driver_dir = \
-        #         '/opt/google/chrome/chromedriver'
-        #
-        #     if os.path.exists(_def_driver_dir):
-        #         _driver_bin_file_path = _def_driver_dir
-        #     else:
-        #         _driver_bin_file_path = os.path.join(
-        #             _driver_dir, 'chromedriver'
-        #         )
-        #
-        # os.environ['webdriver.chrome.driver'] = \
-        #     _driver_bin_file_path
-        #
-        # return webdriver.Chrome(
-        #     _driver_bin_file_path
-        # )
+        _default_driver_dir = os.path.join(
+            _driver_dir,
+            'chromedriver.exe'
+        )
+
+        if sys.platform.startswith('linux'):
+            _default_driver_dir = \
+                '/opt/google/chrome/chromedriver'
+
+        if os.path.exists(_default_driver_dir):
+            _driver_bin_file_path = _default_driver_dir
+        else:
+            _driver_bin_file_path = os.path.join(
+                _driver_dir, 'chromedriver'
+            )
+
+        os.environ['webdriver.chrome.driver'] = \
+            _driver_bin_file_path
+
+        return webdriver.Chrome(
+            _driver_bin_file_path,
+            **kwargs
+        )

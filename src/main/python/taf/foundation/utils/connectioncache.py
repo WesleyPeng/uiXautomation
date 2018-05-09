@@ -70,7 +70,7 @@ class ConnectionCache(object):
             if self.conns:
                 if key == self.current_key:
                     ConnectionCache.current_key = \
-                        self.conns.keys()[-1]
+                        list(self.conns.keys())[-1]
             else:
                 ConnectionCache.current_key = None
 

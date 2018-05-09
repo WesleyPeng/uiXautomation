@@ -12,98 +12,58 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.remote.webelement import WebElement as SeElement
 
-from taf.foundation.api.ui.web import Page
 from taf.foundation.api.ui.web import WebElement as IWebElement
 from taf.foundation.plugins.web.selenium.support.elementfinder import \
     ElementFinder
-from taf.foundation.plugins.web.selenium.support.elementwaiter import \
-    ElementWaiter
-from taf.foundation.plugins.web.selenium.support.findby import FindBy
+from taf.foundation.plugins.web.selenium.support.elementwaithandler import \
+    ElementWaitHandler
+from taf.foundation.plugins.web.selenium.support.locator import Locator
 
 
 class WebElement(IWebElement):
-    def __init__(self, element=None, **conditions):
+    def __init__(
+            self, *elements, **conditions
+    ):
         super(WebElement, self).__init__(
-            element, **conditions
+            *elements, **conditions
         )
 
     @property
-    def parent(self):
-        if self._parent:
-            if isinstance(self._parent, Page):
-                self._parent = self._parent.parent
+    def locator_enum(self):
+        return Locator
 
-            if isinstance(self._parent, WebElement):
-                self._parent = self._parent.current
+    @property
+    def element_finder(self):
+        return ElementFinder
 
-        return self._parent
+    def exists(self, timeout=30):
+        try:
+            ElementWaitHandler(
+                self.root.cache.current, timeout
+            ).wait()
+        except:
+            pass
+        finally:
+            try:
+                _visible = self.current.is_displayed()
+            except:
+                _visible = False
+
+        return _visible
 
     def activate(self):
         if self.exists():
-            self._get_web_driver().execute_script(
+            self.root.cache.current.execute_script(
                 'arguments[0].focus();',
                 self.object
             )
 
-    def exists(self, timeout=30):
-        _visible = False
-
-        try:
-            ElementWaiter(
-                self._get_web_driver(), timeout
-            ).wait()
-        except:
-            pass
-
-        try:
-            _visible = self.current.is_displayed()
-        except:
-            pass
-
-        return _visible
-
-    def _is_valid_element(self, element):
-        return isinstance(element, SeElement)
-
-    def _parse_conditions(self, **conditions):
-        _conditions = {}
-
-        for key, value in conditions.items():
-            try:
-                key = FindBy[key.upper()]
-            except:
-                pass
-
-            if key in FindBy:
-                _conditions[key] = value
-
-        if not _conditions:
-            raise ValueError(
-                'Unable to parse conditions'
+    def _wrap_element(self, element):
+        if isinstance(element, SeElement):
+            self._current = element
+        else:
+            raise RuntimeError(
+                'Non-supported element'
             )
-
-        return _conditions
-
-    def _build_element_finder(self):
-        return ElementFinder(self.parent).find_element
-
-    def _get_web_driver(self):
-        _driver = self.parent
-
-        _nested_depth = 32
-        while (_nested_depth > 0) and not isinstance(
-                _driver, WebDriver
-        ):
-            _driver = getattr(_driver, 'parent', _driver)
-
-            _nested_depth -= 1
-
-        if not isinstance(_driver, WebDriver):
-            raise ValueError(
-                'Unable to identify the web driver'
-            )
-
-        return _driver

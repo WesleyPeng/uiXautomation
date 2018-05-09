@@ -17,7 +17,7 @@ from collections import namedtuple
 from taf.foundation.api.ui.controls import Table as ITable
 from taf.foundation.plugins.web.selenium.support.elementfinder import \
     ElementFinder
-from taf.foundation.plugins.web.selenium.support.findby import FindBy
+from taf.foundation.plugins.web.selenium.support.locator import Locator
 from taf.foundation.plugins.web.selenium.webelement import WebElement
 
 RowItem = namedtuple(
@@ -83,13 +83,13 @@ class Table(WebElement, ITable):
                     cell for cell in ElementFinder(
                         row
                     ).find_elements(
-                        FindBy.XPATH, './/td'
+                        Locator.XPATH, './/td'
                     )
                 ]
             ) for row in ElementFinder(
                 self._tbody
             ).find_elements(
-                FindBy.XPATH, './/tr'
+                Locator.XPATH, './/tr'
             )
         ]
 
@@ -110,7 +110,7 @@ class Table(WebElement, ITable):
         return ElementFinder(
             self._thead
         ).find_elements(
-            FindBy.XPATH,
+            Locator.XPATH,
             './/tr/th'
         )
 
@@ -134,6 +134,6 @@ class Table(WebElement, ITable):
         return ElementFinder(
             self.object
         ).find_elements(
-            FindBy.XPATH,
+            Locator.XPATH,
             './/{}'.format(tag_name)
         )[-1]

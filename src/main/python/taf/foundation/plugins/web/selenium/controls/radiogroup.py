@@ -19,7 +19,7 @@ from taf.foundation.plugins.web.selenium.controls.edit import Edit
 from taf.foundation.plugins.web.selenium.controls.listitem import ListItem
 from taf.foundation.plugins.web.selenium.support.elementfinder import \
     ElementFinder
-from taf.foundation.plugins.web.selenium.support.findby import FindBy
+from taf.foundation.plugins.web.selenium.support.locator import Locator
 from taf.foundation.plugins.web.selenium.webelement import WebElement
 
 RadioButton = namedtuple(
@@ -88,7 +88,7 @@ class RadioGroup(WebElement, IRadioGroup):
             _options = ElementFinder(
                 self.object
             ).find_elements(
-                FindBy.XPATH,
+                Locator.XPATH,
                 './/{}[@type="radio"]'.format(
                     self._option_tag
                 )
@@ -96,7 +96,7 @@ class RadioGroup(WebElement, IRadioGroup):
             _labels = ElementFinder(
                 self.object
             ).find_elements(
-                FindBy.XPATH,
+                Locator.XPATH,
                 './/{}'.format(self._label_tag)
             )
 

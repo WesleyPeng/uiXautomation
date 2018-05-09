@@ -16,7 +16,8 @@ python -m pip install enum34
 python -m pip install paramiko
 python -m pip install PyYAML
 python -m pip install requests
-python -m pip install selenium
+#python -m pip install selenium
+python -m pip install Appium-Python-Client
 
 python -m pip install pybuilder
 

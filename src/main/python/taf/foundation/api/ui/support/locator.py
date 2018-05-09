@@ -12,6 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from .browser import Browser
-from .page import Page
-from .webelement import WebElement
+from enum import Enum
+
+
+class Locator(str, Enum):
+    @classmethod
+    def unknown(cls):
+        return 'unknown'
+
+    @classmethod
+    def prioritized_locators(cls):
+        return ()

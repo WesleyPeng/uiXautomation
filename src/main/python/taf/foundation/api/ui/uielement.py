@@ -12,15 +12,27 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import time
+
 
 class UIElement(object):
-    def __init__(self, element=None):
-        self._parent = getattr(
-            element, 'parent', None
-        )
-        self._current = getattr(
-            element, 'current', None
-        )
+    __slots__ = [
+        '_current', '_root', '_parent',
+        '_children', '_locators', '_constraints'
+    ]
+
+    def __init__(self, *elements, **conditions):
+        self._current = None
+        self._root = None
+        self._parent = None
+        self._children = set()
+        self._locators = {}
+        self._constraints = {}
+
+        self.initialize(*elements, **conditions)
+
+    def __iter__(self):
+        return iter(self._children)
 
     def exists(self, timeout=30):
         """
@@ -28,12 +40,117 @@ class UIElement(object):
         :param timeout: Default timeout value in seconds
         :return: Boolean
         """
+        self._sync(timeout)
+
         return self._current is not None
+
+    # @classmethod
+    # def create(cls, **conditions):
+    #     return UIAElement(**conditions)
+    #
+    # @classmethod
+    # def compose(cls, *elements, **conditions):
+    #     return UIAElement(*elements, **conditions)
+
+    @property
+    def root(self):
+        if not self._root:
+            self._resolve_root()
+
+        return self._root
 
     @property
     def parent(self):
+        if not self._parent:
+            self._resolve_parent()
+
         return self._parent
 
     @property
+    def object(self):
+        return self._current or self.current
+
+    @property
     def current(self):
+        if not self._locators:
+            raise ValueError(
+                'Unable to find element without locator'
+            )
+
+        self._current = self._find_current_element()
+
         return self._current
+
+    def initialize(self, *elements, **conditions):
+        self._initialize_children(*elements)
+
+        if 'element' in conditions:
+            self._initialize_instant_element(
+                conditions.pop('element')
+            )
+
+        if 'parent' in conditions:
+            self._resolve_parent(
+                conditions.pop('parent')
+            )
+
+        if not self._current:
+            self._parse_conditions(
+                **conditions
+            )
+
+    def _initialize_children(self, *elements):
+        for element in elements:
+            if not isinstance(element, UIElement):
+                element = self._wrap_element(element)
+
+            element._parent = self
+            self._children.add(element)
+
+    def _initialize_instant_element(self, element):
+        if isinstance(element, type(self)):
+            self._unwrap_element(element)
+        else:
+            self._wrap_element(element)
+
+    def _unwrap_element(self, element):
+        [
+            setattr(
+                self, prop, getattr(element, prop)
+            ) for prop in self.__slots__
+        ]
+
+    def _wrap_element(self, element):
+        raise NotImplementedError(
+            'Raw UI element wrapper'
+        )
+
+    def _find_current_element(self):
+        raise NotImplementedError(
+            'Build UIElement by locator(s)'
+        )
+
+    def _resolve_parent(self, element=None):
+        raise NotImplementedError(
+            'UIElement logic parent'
+        )
+
+    def _resolve_root(self):
+        raise NotImplementedError(
+            'UIAutomation Driver'
+        )
+
+    def _parse_conditions(
+            self, **conditions
+    ):
+        pass
+        # raise NotImplementedError(
+        #     'Identify locators and constraints'
+        # )
+
+    def _sync(self, timeout=30):
+        _now = time.time()
+        while self.current is None and (
+                timeout > (time.time() - _now)
+        ):
+            time.sleep(1)

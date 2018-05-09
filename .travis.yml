@@ -19,7 +19,8 @@ install:
     - pip install paramiko
     - pip install PyYAML
     - pip install requests
-    - pip install selenium
+#    - pip install selenium
+    - pip install Appium-Python-Client
 
 script: pyb -v clean publish
 

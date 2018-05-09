@@ -12,74 +12,34 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from functools import reduce
+from taf.foundation.api.ui.support import ElementFinder as IElementFinder
+from taf.foundation.plugins.web.selenium.support.locator import Locator
 
-from taf.foundation.plugins.web.selenium.support.findby import FindBy
 
-
-class ElementFinder(object):
-    BY = {
-        FindBy.ID: 'find_elements_by_id',
-        FindBy.XPATH: 'find_elements_by_xpath',
-        FindBy.NAME: 'find_elements_by_name',
-        FindBy.TAG: 'find_elements_by_tag_name',
-        FindBy.CSS: 'find_elements_by_css_selector',
-        FindBy.CLASSNAME: 'find_elements_by_class_name'
-    }
-
+class ElementFinder(IElementFinder):
     def __init__(self, anchor):
         self.anchor = anchor
 
-    def find_elements(self, by=FindBy.ID, value=None):
-        elements = []
+    @property
+    def elements_finding_strategies(self):
+        return {
+            Locator.ID: 'find_elements_by_id',
+            Locator.XPATH: 'find_elements_by_xpath',
+            Locator.NAME: 'find_elements_by_name',
+            Locator.TAG: 'find_elements_by_tag_name',
+            Locator.CSS: 'find_elements_by_css_selector',
+            Locator.CLASSNAME: 'find_elements_by_class_name',
+            Locator.TEXT: 'find_elements_by_link_text',
+            Locator.TEXT_CONTAINS: 'find_elements_by_partial_link_text'
+        }
 
-        _invoker = getattr(
-            self.anchor,
-            ElementFinder.BY.get(by),
-            None
+    @property
+    def excluded_screening_locators(self):
+        return Locator.XPATH, Locator.CSS
+
+    def find_elements(self, locator, value):
+        return super(
+            ElementFinder, self
+        ).find_elements(
+            locator, value
         )
-
-        if _invoker and callable(_invoker):
-            elements.extend(_invoker(value))
-
-        return elements
-
-    def find_elements_by_conditions(
-            self, **conditions
-    ):
-        elements = []
-
-        for by, value in conditions.items():
-            elements = reduce(
-                lambda accum, current:
-                accum if current in accum
-                else accum + [current],
-                [elements, ] + self.find_elements(
-                    by, value
-                )
-            )
-
-        return elements
-
-    def find_element(self, **conditions):
-        for element in self.find_elements_by_conditions(
-                **conditions
-        ):
-            for key, value in conditions.items():
-                _attr_value = element.get_attribute(
-                    '{}'.format(key)
-                ) or getattr(
-                    element, '{}'.format(key), None
-                )
-
-                if key in (
-                        FindBy.ID, FindBy.NAME,
-                        FindBy.CLASSNAME, FindBy.TAG
-                ) and _attr_value != value:
-                    break
-            else:
-                break
-        else:
-            element = None
-
-        return element
