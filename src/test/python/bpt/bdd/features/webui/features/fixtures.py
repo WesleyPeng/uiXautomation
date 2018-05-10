@@ -12,11 +12,29 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from taf.foundation.plugins.web.selenium.controls.button import Button
-from taf.foundation.plugins.web.selenium.controls.checkbox import CheckBox
-from taf.foundation.plugins.web.selenium.controls.combobox import ComboBox
-from taf.foundation.plugins.web.selenium.controls.edit import Edit
-from taf.foundation.plugins.web.selenium.controls.frame import Frame
-from taf.foundation.plugins.web.selenium.controls.link import Link
-from taf.foundation.plugins.web.selenium.controls.radiogroup import RadioGroup
-from taf.foundation.plugins.web.selenium.controls.table import Table
+from behave import fixture
+
+from taf.modeling.web import Browser
+
+
+@fixture
+def web_browser_fixture(context, *args, **kwargs):
+    browser = None
+
+    try:
+        userdata = context.config.userdata
+        is_remote = userdata.get(
+            'is_remote', 'False'
+        ).lower() in ['true', 'yes']
+
+        browser = Browser(
+            name=userdata.get('browser', 'firefox'),
+            is_remote=is_remote
+        )
+
+        context.browser = browser
+
+        yield browser
+    finally:
+        if browser:
+            browser.close()

@@ -56,7 +56,7 @@ def initializer(project):
     # integration tests
     # project.set_property(
     #     "dir_source_integrationtest_python",
-    #     "src/test/python/atests"
+    #     "src/test/python/bpt"
     # )
     # project.set_property(
     #     "integrationtest_file_glob",
@@ -72,6 +72,7 @@ def initializer(project):
     #     'dir_source_main_python',
     #     'src/main/python'
     # )
+
     project.set_property(
         'dir_source_main_scripts',
         None

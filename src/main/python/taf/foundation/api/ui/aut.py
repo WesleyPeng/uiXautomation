@@ -47,11 +47,21 @@ class AUT(object):
 
             AUT.current = self
 
+    def take_screenshot(self):
+        self.activate()
+
+        return self.get_screenshot_data()
+
     def close(self):
         self.cache.close(self.id)
 
         if not self.cache.current:
             AUT.cache = None
+
+    def get_screenshot_data(self):
+        raise NotImplementedError(
+            'Get screenshot data from AUT'
+        )
 
     def _create_instance(self, name, **kwargs):
         raise NotImplementedError(

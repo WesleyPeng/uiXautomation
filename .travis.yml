@@ -21,6 +21,7 @@ install:
     - pip install requests
 #    - pip install selenium
     - pip install Appium-Python-Client
+    - pip install allure-behave
 
 script: pyb -v clean publish
 

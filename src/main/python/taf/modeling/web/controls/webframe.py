@@ -12,11 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from taf.foundation.plugins.web.selenium.controls.button import Button
-from taf.foundation.plugins.web.selenium.controls.checkbox import CheckBox
-from taf.foundation.plugins.web.selenium.controls.combobox import ComboBox
-from taf.foundation.plugins.web.selenium.controls.edit import Edit
-from taf.foundation.plugins.web.selenium.controls.frame import Frame
-from taf.foundation.plugins.web.selenium.controls.link import Link
-from taf.foundation.plugins.web.selenium.controls.radiogroup import RadioGroup
-from taf.foundation.plugins.web.selenium.controls.table import Table
+from taf.foundation import ServiceLocator
+from taf.foundation.api.ui.controls import Frame
+from taf.foundation.api.ui.web import WebElement
+
+
+class WebFrame(
+    ServiceLocator.get_modeled_control(
+        Frame
+    ), WebElement, Frame
+):
+    pass

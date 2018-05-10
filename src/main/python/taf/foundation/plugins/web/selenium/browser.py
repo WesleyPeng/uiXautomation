@@ -59,6 +59,14 @@ class Browser(IBrowser):
     def maximize(self):
         self.cache.current.maximize_window()
 
+    def get_screenshot_data(self):
+        if isinstance(self.cache.current, RemoteWebDriver):
+            return self.cache.current.get_screenshot_as_png()
+        else:
+            raise RuntimeError(
+                "Selenium Web Driver is required"
+            )
+
     def _create_instance(
             self, name, **kwargs
     ):
