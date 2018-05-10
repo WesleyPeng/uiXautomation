@@ -70,7 +70,7 @@ class WebElement(UIElement):
             if isinstance(element, (WebElement, Page)):
                 self._parent = element
             else:
-                self._parent = self._wrap_element(element)
+                self._parent = self.create(element=element)
 
     def _resolve_root(self):
         if Browser.current:

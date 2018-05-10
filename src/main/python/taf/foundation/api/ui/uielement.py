@@ -12,8 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import time
-
 
 class UIElement(object):
     __slots__ = [
@@ -42,15 +40,15 @@ class UIElement(object):
         """
         self._sync(timeout)
 
-        return self._current is not None
+        return self.object is not None
+
+    @classmethod
+    def create(cls, **conditions):
+        return cls(**conditions)
 
     # @classmethod
-    # def create(cls, **conditions):
-    #     return UIAElement(**conditions)
-    #
-    # @classmethod
     # def compose(cls, *elements, **conditions):
-    #     return UIAElement(*elements, **conditions)
+    #     return cls(*elements, **conditions)
 
     @property
     def root(self):
@@ -73,11 +71,12 @@ class UIElement(object):
     @property
     def current(self):
         if not self._locators:
-            raise ValueError(
-                'Unable to find element without locator'
-            )
-
-        self._current = self._find_current_element()
+            if not self._current:
+                raise ValueError(
+                    'Unable to find element without locator'
+                )
+        else:
+            self._current = self._find_current_element()
 
         return self._current
 
@@ -102,13 +101,13 @@ class UIElement(object):
     def _initialize_children(self, *elements):
         for element in elements:
             if not isinstance(element, UIElement):
-                element = self._wrap_element(element)
+                element = self.create(element=element)
 
             element._parent = self
             self._children.add(element)
 
     def _initialize_instant_element(self, element):
-        if isinstance(element, type(self)):
+        if isinstance(element, UIElement):
             self._unwrap_element(element)
         else:
             self._wrap_element(element)
@@ -149,6 +148,8 @@ class UIElement(object):
         # )
 
     def _sync(self, timeout=30):
+        import time
+
         _now = time.time()
         while self.current is None and (
                 timeout > (time.time() - _now)

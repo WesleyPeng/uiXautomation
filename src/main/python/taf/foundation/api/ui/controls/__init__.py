@@ -16,6 +16,7 @@ from .button import Button
 from .checkbox import CheckBox
 from .combobox import ComboBox
 from .edit import Edit
+from .frame import Frame
 from .link import Link
 from .listitem import ListItem
 from .radiogroup import RadioGroup

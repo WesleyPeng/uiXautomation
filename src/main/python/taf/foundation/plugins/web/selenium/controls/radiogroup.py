@@ -28,38 +28,33 @@ RadioButton = namedtuple(
 
 
 class RadioGroup(WebElement, IRadioGroup):
-    def __init__(self, element=None, **conditions):
-        _arg_tag = 'tag'
-        _arg_option = 'option'
-        _arg_opt_label = 'label'
+    def __init__(
+            self, *elements, **conditions
+    ):
+        conditions.setdefault('tag', 'form')
 
-        conditions.setdefault(_arg_tag, 'form')
+        _options_kwarg = 'option'
+        _opt_label_kwarg = 'label'
 
-        if _arg_option in conditions:
-            self._option_tag = conditions.pop(_arg_option)
-        else:
-            self._option_tag = 'input'
+        self._options_tag = conditions.pop(
+            _options_kwarg
+        ) if _options_kwarg in conditions else 'input'
 
-        if _arg_opt_label in conditions:
-            self._label_tag = conditions.pop(_arg_opt_label)
-        else:
-            self._label_tag = _arg_opt_label
+        self._label_tag = conditions.pop(
+            _opt_label_kwarg
+        ) if _options_kwarg in conditions else _opt_label_kwarg
 
-        WebElement.__init__(
-            self, element, **conditions
-        )
-
-        self._items = []
+        WebElement.__init__(self, *elements, **conditions)
 
     def set(self, value):
         if str(value).isdigit() and (
-                    int(value) < len(self.items)
+                int(value) < len(list(self.items))
         ):
-            self.items[int(value)].option.select()
+            list(self.items)[int(value)].option.select()
         else:
             for item in self.items:
                 if (
-                            value == item.option.current.get_attribute('value')
+                        value == item.option.current.get_attribute('value')
                 ) or (value == item.label.text):
                     item.option.select()
                     break
@@ -81,31 +76,29 @@ class RadioGroup(WebElement, IRadioGroup):
 
     @property
     def items(self):
-        if self._items:
-            return self._items
-
-        if self.exists():
-            _options = ElementFinder(
-                self.object
-            ).find_elements(
-                Locator.XPATH,
-                './/{}[@type="radio"]'.format(
-                    self._option_tag
-                )
-            )
-            _labels = ElementFinder(
-                self.object
-            ).find_elements(
-                Locator.XPATH,
-                './/{}'.format(self._label_tag)
-            )
-
-            for index, element in enumerate(_options):
-                self._items.append(
-                    RadioButton(
-                        ListItem(element, parent=self),
-                        Edit(_labels[index], parent=self)
+        if not self._children:
+            if self.exists():
+                _options = ElementFinder(
+                    self.object
+                ).find_elements(
+                    Locator.XPATH,
+                    './/{}[@type="radio"]'.format(
+                        self._options_tag
                     )
                 )
+                _labels = ElementFinder(
+                    self.object
+                ).find_elements(
+                    Locator.XPATH,
+                    './/{}'.format(self._label_tag)
+                )
 
-        return self._items
+                for index, element in enumerate(_options):
+                    self._children.add(
+                        RadioButton(
+                            ListItem(element=element, parent=self),
+                            Edit(element=_labels[index], parent=self)
+                        )
+                    )
+
+        return (child for child in self._children)

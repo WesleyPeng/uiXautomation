@@ -27,12 +27,10 @@ RowItem = namedtuple(
 
 class Table(WebElement, ITable):
     def __init__(
-            self,
-            element=None,
-            **conditions
+            self, *elements, **conditions
     ):
-        super(Table, self).__init__(
-            element, **conditions
+        WebElement.__init__(
+            self, *elements, **conditions
         )
 
         self._thead = None
