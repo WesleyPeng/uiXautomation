@@ -13,63 +13,67 @@
 # limitations under the License.
 
 from taf.foundation.api.ui import UIElement
+from taf.foundation.api.ui.support import ElementFinder
+from taf.foundation.api.ui.support import Locator
+from .browser import Browser
 from .page import Page
 
 
 class WebElement(UIElement):
-    def __init__(self, element=None, **conditions):
-        super(WebElement, self).__init__(element)
-
-        self._conditions = {}
-        self._finder = None
-        self._initialize(element, **conditions)
+    def __init__(self, *elements, **conditions):
+        super(WebElement, self).__init__(
+            *elements, **conditions
+        )
 
     @property
-    def current(self):
-        if self._finder and self._conditions:
-            self._current = self._finder(
-                **self._conditions
-            )
-
-        return self._current
+    def locator_enum(self):
+        return Locator
 
     @property
-    def object(self):
-        return self._current or self.current
-
-    def _initialize(self, element=None, **conditions):
-        if 'parent' in conditions:
-            self._parent = conditions.pop('parent')
-
-        if not self._parent:
-            self._parent = Page()
-
-        if not self._current:
-            if not (element or conditions):
-                raise ValueError(
-                    'Unable to initialize the element'
-                )
-
-            if self._is_valid_element(element):
-                self._wrap_element(element)
-            else:
-                self._conditions = self._parse_conditions(
-                    **conditions
-                )
-                self._finder = self._build_element_finder()
-
-    def _is_valid_element(self, element):
-        return isinstance(element, WebElement)
-
-    def _wrap_element(self, element):
-        self._current = element
+    def element_finder(self):
+        return ElementFinder
 
     def _parse_conditions(self, **conditions):
-        raise NotImplementedError(
-            'Parse conditions'
+        for key, value in conditions.items():
+            try:
+                key = self.locator_enum[key.upper()]
+            except KeyError:
+                self._constraints[key] = value
+            else:
+                self._locators[key] = value
+
+    def _find_current_element(self):
+        if isinstance(self.parent, WebElement):
+            anchor = self.parent.current
+        elif isinstance(self.parent, Page):
+            anchor = self.parent.root
+        else:
+            anchor = self.root.cache.current
+
+        prioritized_locators = [
+            (key, self._locators.get(key))
+            for key in self.locator_enum.prioritized_locators()
+            if key in self._locators
+        ]
+
+        return self.element_finder(
+            anchor=anchor
+        ).find_element(
+            *prioritized_locators,
+            **self._constraints
         )
 
-    def _build_element_finder(self):
-        raise NotImplementedError(
-            'Build web element locator'
-        )
+    def _resolve_parent(self, element=None):
+        if element is None:
+            self._parent = Page(self)
+        else:
+            if isinstance(element, (WebElement, Page)):
+                self._parent = element
+            else:
+                self._parent = self.create(element=element)
+
+    def _resolve_root(self):
+        if Browser.current:
+            self._root = Browser.current
+        else:
+            raise RuntimeError('Browser is required')

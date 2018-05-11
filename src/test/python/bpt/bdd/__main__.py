@@ -12,6 +12,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from .browser import Browser
-from .page import Page
-from .webelement import WebElement
+import os
+import sys
+
+from behave.__main__ import main
+
+if __name__ == '__main__':
+    args = [
+        os.path.join(
+            os.path.dirname(__file__),
+            'features'
+        )
+    ]
+
+    args += sys.argv[1:]
+
+    sys.exit(main(args))

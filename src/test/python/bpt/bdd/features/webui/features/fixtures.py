@@ -12,6 +12,28 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from .browser import Browser
-from .page import Page
-from .webelement import WebElement
+from behave import fixture
+
+from taf.modeling.web import Browser
+
+
+@fixture
+def web_browser_fixture(context, *args, **kwargs):
+    browser = None
+
+    try:
+        userdata = context.config.userdata
+
+        browser = Browser(
+            name=userdata.get('browser', 'firefox'),
+            is_remote=userdata.get(
+                'is_remote', 'False'
+            ).lower() in ['true', 'yes']
+        )
+
+        context.browser = browser
+
+        yield browser
+    finally:
+        if browser:
+            browser.close()

@@ -97,7 +97,7 @@ class TestModelingTypes(TestCase):
         txt_search.set(_value)
         btn_go.click()
 
-        self.assertEquals(
+        self.assertEqual(
             txt_search.value,
             _value
         )

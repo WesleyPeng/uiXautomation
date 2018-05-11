@@ -12,6 +12,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from .browser import Browser
-from .page import Page
-from .webelement import WebElement
+from taf.foundation.api.ui.support import Locator as LocatorEnum
+
+
+class Locator(LocatorEnum):
+    ID = 'id'
+    XPATH = 'xpath'
+    NAME = 'name'
+    TAG = 'tag_name'
+    CLASSNAME = 'class'
+    CSS = 'css'
+    TEXT = 'text'
+    TEXT_CONTAINS = 'innerText'  # or 'innerHTML'
+
+    @classmethod
+    def prioritized_locators(cls):
+        return Locator.ID, Locator.XPATH, \
+               Locator.CSS, Locator.NAME, \
+               Locator.CLASSNAME, Locator.TEXT, \
+               Locator.TEXT_CONTAINS, Locator.TAG

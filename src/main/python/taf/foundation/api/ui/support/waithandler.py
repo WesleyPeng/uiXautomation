@@ -12,34 +12,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from taf.foundation.api.ui import AUT
+from taf.foundation.utils import ConnectionCache
 
 
-class Browser(AUT):
+class WaitHandler(object):
     def __init__(
             self,
-            name='firefox',
-            identifier=None,
-            **kwargs
+            handler=None,
+            timeout=None
     ):
-        super(Browser, self).__init__(
-            name, identifier, **kwargs
-        )
+        self.handler = handler or ConnectionCache().current
+        self.timeout = timeout or 30
 
-    @staticmethod
-    def launch(url='about:blank', **kwargs):
+    def wait(self, timeout=None):
         raise NotImplementedError(
-            'Web browser navigates to specific page'
-        )
-
-    def maximize(self):
-        raise NotImplementedError(
-            'Maximize the current browser'
-        )
-
-    def _create_instance(self, name, **kwargs):
-        raise NotImplementedError(
-            'Create web browser instance (type={})'.format(
-                name
-            )
+            'Waits until the target is fully loaded'
         )

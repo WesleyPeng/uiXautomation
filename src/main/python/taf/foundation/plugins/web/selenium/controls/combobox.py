@@ -16,35 +16,28 @@ from taf.foundation.api.ui.controls import ComboBox as IComboBox
 from taf.foundation.plugins.web.selenium.controls.listitem import ListItem
 from taf.foundation.plugins.web.selenium.support.elementfinder import \
     ElementFinder
-from taf.foundation.plugins.web.selenium.support.findby import FindBy
+from taf.foundation.plugins.web.selenium.support.locator import Locator
 from taf.foundation.plugins.web.selenium.webelement import WebElement
 
 
 class ComboBox(WebElement, IComboBox):
-    def __init__(self, element=None, **conditions):
-        _arg_tag = 'tag'
-        _arg_option = 'option'
-        _arg_multi_selection = 'multiple'
+    def __init__(self, *elements, **conditions):
+        conditions.setdefault('tag', 'select')
 
-        conditions.setdefault(_arg_tag, 'select')
+        _options_kwarg = 'option'
+        _multi_selection_kwarg = 'multiple'
 
-        if _arg_option in conditions:
-            self._option_tag = conditions.pop(_arg_option)
-        else:
-            self._option_tag = _arg_option
+        self._options_tag = conditions.pop(
+            _options_kwarg
+        ) if _options_kwarg in conditions else _options_kwarg
 
-        if _arg_multi_selection in conditions:
-            self._multi_attr = conditions.pop(
-                _arg_multi_selection
-            )
-        else:
-            self._multi_attr = _arg_multi_selection
+        self._multi_selection_attr = conditions.pop(
+            _multi_selection_kwarg
+        ) if _multi_selection_kwarg in conditions else _multi_selection_kwarg
 
         WebElement.__init__(
-            self, element, **conditions
+            self, *elements, **conditions
         )
-
-        self._options = []
 
     def set(self, value):
         if isinstance(value, (list, tuple)):
@@ -57,14 +50,16 @@ class ComboBox(WebElement, IComboBox):
 
         for val in value:
             if str(val).isdigit():
-                self.options[int(val)].select()
+                list(self.options)[int(val)].select()
+
                 continue
             else:
                 for opt in self.options:
                     if (
-                                val == opt.current.get_attribute('value')
+                            val == opt.current.get_attribute('value')
                     ) or (val == opt.object.text):
                         opt.select()
+
                         break
                 else:
                     raise ValueError(
@@ -77,32 +72,28 @@ class ComboBox(WebElement, IComboBox):
     def value(self):
         if self.exists():
             return ';'.join(
-                [
-                    opt.object.text
-                    for opt in self.options
-                    if opt.is_selected
-                ]
+                opt.object.text
+                for opt in self.options
+                if opt.is_selected
             )
 
         return r''
 
     @property
     def options(self):
-        if self._options:
-            return self._options
+        if not self._children:
+            if self.exists():
+                for element in ElementFinder(
+                        self.object
+                ).find_elements(
+                    Locator.XPATH,
+                    './/{}'.format(self._options_tag)
+                ):
+                    self._children.add(
+                        ListItem(element=element, parent=self)
+                    )
 
-        if self.exists():
-            for element in ElementFinder(
-                    self.object
-            ).find_elements(
-                FindBy.TAG,
-                self._option_tag
-            ):
-                self._options.append(
-                    ListItem(element, parent=self)
-                )
-
-        return self._options
+        return (child for child in self._children)
 
     @property
     def is_read_only(self):
@@ -113,7 +104,7 @@ class ComboBox(WebElement, IComboBox):
     @property
     def can_select_multiple(self):
         return self._get_attribute(
-            self._multi_attr
+            self._multi_selection_attr
         )
 
     @property

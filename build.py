@@ -22,7 +22,7 @@ default_task = [
 
 @init
 def initializer(project):
-    project.version = '0.2.0'
+    project.version = '0.5.0'
     project.summary = summary
     project.description = __doc__
 
@@ -56,7 +56,7 @@ def initializer(project):
     # integration tests
     # project.set_property(
     #     "dir_source_integrationtest_python",
-    #     "src/test/python/atests"
+    #     "src/test/python/bpt"
     # )
     # project.set_property(
     #     "integrationtest_file_glob",
@@ -72,6 +72,7 @@ def initializer(project):
     #     'dir_source_main_python',
     #     'src/main/python'
     # )
+
     project.set_property(
         'dir_source_main_scripts',
         None

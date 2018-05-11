@@ -12,6 +12,4 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from .browser import Browser
-from .page import Page
-from .webelement import WebElement
+from bpt.bdd.features.webui.features.steps import *

@@ -12,6 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from .browser import Browser
-from .page import Page
-from .webelement import WebElement
+from taf.foundation import ServiceLocator
+from taf.foundation.api.ui.controls import Frame
+from taf.foundation.api.ui.web import WebElement
+
+
+class WebFrame(
+    ServiceLocator.get_modeled_control(
+        Frame
+    ), WebElement, Frame
+):
+    pass

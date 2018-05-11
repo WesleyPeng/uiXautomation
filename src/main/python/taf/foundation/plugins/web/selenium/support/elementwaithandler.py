@@ -15,17 +15,19 @@
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.support.ui import WebDriverWait
 
-from taf.foundation.api.ui.web import Waiter
+from taf.foundation.api.ui.support import WaitHandler
 
 
-class ElementWaiter(Waiter):
+class ElementWaitHandler(WaitHandler):
     def __init__(
             self,
-            waiter=None,
-            timeout=30.0,
+            handler=None,
+            timeout=None,
             poll_frequency=1.0
     ):
-        super(ElementWaiter, self).__init__(waiter, timeout)
+        super(ElementWaitHandler, self).__init__(
+            handler, timeout
+        )
 
         self.poll_frequency = poll_frequency or 1.0
 
@@ -58,7 +60,7 @@ class ElementWaiter(Waiter):
         }
 
         for animation, script in animation_type_script_pairs.items():
-            ret = self.waiter.execute_script(
+            ret = self.handler.execute_script(
                 'if (window.{}) return true; else return false;'.format(
                     animation
                 )
@@ -69,7 +71,7 @@ class ElementWaiter(Waiter):
             if ret:
                 try:
                     WebDriverWait(
-                        self.waiter,
+                        self.handler,
                         self.timeout,
                         self.poll_frequency
                     ).until(

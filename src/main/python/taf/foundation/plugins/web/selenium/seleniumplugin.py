@@ -18,6 +18,7 @@ from taf.foundation.plugins.web.selenium.controls import Button
 from taf.foundation.plugins.web.selenium.controls import CheckBox
 from taf.foundation.plugins.web.selenium.controls import ComboBox
 from taf.foundation.plugins.web.selenium.controls import Edit
+from taf.foundation.plugins.web.selenium.controls import Frame
 from taf.foundation.plugins.web.selenium.controls import Link
 from taf.foundation.plugins.web.selenium.controls import RadioGroup
 from taf.foundation.plugins.web.selenium.controls import Table
@@ -29,8 +30,8 @@ class SeleniumPlugin(WebPlugin):
         return [
             Button, CheckBox,
             ComboBox, Edit,
-            Link, RadioGroup,
-            Table
+            Frame, Link,
+            RadioGroup, Table
         ]
 
     @property
