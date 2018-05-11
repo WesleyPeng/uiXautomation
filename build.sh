@@ -29,15 +29,19 @@ pyb -v clean publish
 # python -m pip install dist/dist/PyXTaf*.whl
 # python -m PyXTaf ${ARGS}
 
-# echo -e "${CYAN}Save artifacts and run BDD tests${NC}"
+# echo -e "${CYAN}Save artifacts and run BDD/ATDD tests${NC}"
 mkdir -p ${ARTIFACTS}
 mv build/reports/*.xml ${ARTIFACTS}/
 
 pushd .
-python -m pip install allure-behave
 python -m pip install dist/dist/PyXTaf*.whl
 cd ./src/test/python
+
+python -m pip install allure-behave
 python -m bpt.bdd -f allure_behave.formatter:AllureFormatter -o ../../../${ARTIFACTS}/allure -t ~@wip -D browser="chrome" -D is_remote="True"
+
+python -m pip install robotframework
+python -m robot -d ../../../${ARTIFACTS}/robot -v is_remote:True bpt/atdd/robot/bing.robot
 popd
 
 mv dist/dist/PyXTaf*.whl ${ARTIFACTS}/
