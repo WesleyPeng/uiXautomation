@@ -84,7 +84,27 @@ class Browser(IBrowser):
                         host=kwargs.get('host', 'localhost'),
                         port=kwargs.get('port', 4444)
                     )
-                )
+                ),
+                desired_capabilities=kwargs.get(
+                    'desired_capabilities',
+                    {
+                        'browserName': {
+                            'firefox': 'firefox',
+                            'ff': 'firefox',
+                            'chrome': 'chrome',
+                            'gc': 'chrome',
+                            'googlechrome': 'chrome'
+                        }.get(
+                            name.lower(),
+                            'firefox'
+                        ),
+                    }
+                ),
+                browser_profile=kwargs.get('browser_profile'),
+                proxy=kwargs.get('proxy'),
+                keep_alive=kwargs.get('keep_alive', False),
+                file_detector=kwargs.get('file_detector'),
+                options=kwargs.get('options')
             )
         else:
             _browser_creation_strategies = {

@@ -18,7 +18,7 @@ from taf.foundation.plugins.web.selenium.support.locator import Locator
 
 class ElementFinder(IElementFinder):
     def __init__(self, anchor):
-        self.anchor = anchor
+        super(ElementFinder, self).__init__(anchor)
 
     @property
     def elements_finding_strategies(self):

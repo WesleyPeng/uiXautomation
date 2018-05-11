@@ -23,13 +23,12 @@ def web_browser_fixture(context, *args, **kwargs):
 
     try:
         userdata = context.config.userdata
-        is_remote = userdata.get(
-            'is_remote', 'False'
-        ).lower() in ['true', 'yes']
 
         browser = Browser(
             name=userdata.get('browser', 'firefox'),
-            is_remote=is_remote
+            is_remote=userdata.get(
+                'is_remote', 'False'
+            ).lower() in ['true', 'yes']
         )
 
         context.browser = browser

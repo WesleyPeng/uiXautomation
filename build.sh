@@ -29,8 +29,16 @@ pyb -v clean publish
 # python -m pip install dist/dist/PyXTaf*.whl
 # python -m PyXTaf ${ARGS}
 
-# echo -e "${CYAN}Save artifacts${NC}"
+# echo -e "${CYAN}Save artifacts and run BDD tests${NC}"
 mkdir -p ${ARTIFACTS}
-mv dist/dist/PyXTaf*.whl ${ARTIFACTS}/
 mv build/reports/*.xml ${ARTIFACTS}/
+
+pushd .
+python -m pip install allure-behave
+python -m pip install dist/dist/PyXTaf*.whl
+cd ./src/test/python
+python -m bpt.bdd -f allure_behave.formatter:AllureFormatter -o ../../../${ARTIFACTS}/allure -t ~@wip -D browser="chrome" -D is_remote="True"
+popd
+
+mv dist/dist/PyXTaf*.whl ${ARTIFACTS}/
 chmod a+w -R ${ARTIFACTS}/
