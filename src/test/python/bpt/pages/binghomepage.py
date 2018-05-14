@@ -14,8 +14,8 @@
 
 from taf.foundation.api.ui.web import Page
 from taf.modeling.web import WebButton
-from taf.modeling.web import WebLink
 from taf.modeling.web import WebTextBox
+from .searchresultspage import SearchResultsPage
 
 
 class BingHomePage(Page):
@@ -34,19 +34,3 @@ class BingHomePage(Page):
         self.btn_search_go.click()
 
         return SearchResultsPage()
-
-
-class SearchResultsPage(Page):
-    def __init__(self, *elements, **conditions):
-        super(SearchResultsPage, self).__init__(
-            *elements, **conditions
-        )
-
-        self.lnk_first_record = WebLink(
-            tag='a',
-            xpath='//div[@id="b_content"]/ol[@id="b_results"]/li//a'
-        )
-
-    @property
-    def text_of_first_record(self):
-        return self.lnk_first_record.text

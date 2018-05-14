@@ -12,5 +12,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from .binghomepage import BingHomePage
-from .binghomepage import SearchResultsPage
+from taf.foundation.api.ui.web import Page
+from taf.modeling.web import WebLink
+
+
+class SearchResultsPage(Page):
+    def __init__(self, *elements, **conditions):
+        super(SearchResultsPage, self).__init__(
+            *elements, **conditions
+        )
+
+        self.lnk_first_record = WebLink(
+            tag='a',
+            xpath='//div[@id="b_content"]/ol[@id="b_results"]/li//a'
+        )
+
+    @property
+    def text_of_first_record(self):
+        return self.lnk_first_record.text

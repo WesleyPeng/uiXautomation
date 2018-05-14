@@ -19,9 +19,8 @@ python -m pip install requests
 #python -m pip install selenium
 python -m pip install Appium-Python-Client
 
+echo -e "${CYAN}Build uiXautomation(PyXTaf*.whl file) project & Run unit tests${NC}"
 python -m pip install pybuilder
-
-echo -e "${CYAN}Build uiXautomation(PyXTaf*.whl file) project & Run tests${NC}"
 pyb -v clean publish
 
 # ARGS=${@:2}
@@ -29,20 +28,22 @@ pyb -v clean publish
 # python -m pip install dist/dist/PyXTaf*.whl
 # python -m PyXTaf ${ARGS}
 
-# echo -e "${CYAN}Save artifacts and run BDD/ATDD tests${NC}"
+echo -e "${CYAN}Run BDD/ATDD tests and save artifacts/results${NC}"
+python -m pip install dist/dist/PyXTaf*.whl
 mkdir -p ${ARTIFACTS}
 mv build/reports/*.xml ${ARTIFACTS}/
 
-pushd .
-python -m pip install dist/dist/PyXTaf*.whl
+pushd . >/dev/null
 cd ./src/test/python
 
+echo -e "${CYAN}Run BDD test(s)${NC}"
 python -m pip install allure-behave
 python -m bpt.bdd -f allure_behave.formatter:AllureFormatter -o ../../../${ARTIFACTS}/allure -t ~@wip -D browser="chrome" -D is_remote="True"
 
+echo -e "${CYAN}Run ATDD test(s)${NC}"
 python -m pip install robotframework
-python -m robot -d ../../../${ARTIFACTS}/robot -v is_remote:True bpt/atdd/robot/bing.robot
-popd
+python -m robot -d ../../../${ARTIFACTS}/robot -v is_remote:True -v enable_screenshot:True bpt/atdd/robot/bing.robot
+popd > /dev/null
 
 mv dist/dist/PyXTaf*.whl ${ARTIFACTS}/
 chmod a+w -R ${ARTIFACTS}/
