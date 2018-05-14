@@ -12,15 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from robot.api import logger
 from robot.version import get_version
 
-from bpt.bdd.features.webui.features.steps.pages import BingHomePage
-from bpt.bdd.features.webui.features.steps.pages import SearchResultsPage
+from bpt.pages import BingHomePage
+from bpt.pages import SearchResultsPage
 from taf.modeling.web import Browser
+from .robotlistener import RobotListener
 
 
 class SearchKeywords(object):
-    # ROBOT_LISTENER_API_VERSION = get_version()
     ROBOT_LIBRARY_VERSION = get_version()
     ROBOT_LIBRARY_SCOPE = 'GLOBAL'
 
@@ -29,16 +30,31 @@ class SearchKeywords(object):
         self.home_page = None
         self.search_results_page = None
 
+        self.listener = RobotListener(
+            'selenium.webdriver.remote.remote_connection'
+        )
+        self.ROBOT_LIBRARY_LISTENER = self.listener
+
     def launch_browser(
-            self, name='firefox', is_remote=False
+            self,
+            name='firefox',
+            is_remote=False,
+            enable_screenshot=False
     ):
         self.browser = Browser(
             name=name, is_remote=is_remote
         )
 
+        if str(enable_screenshot).lower() not in ('false', 'no'):
+            self.listener.enable_screenshot(
+                self.browser
+            )
+
     def close_browser(self):
         if self.browser:
             self.browser.close()
+
+        self.listener.disable_screenshot()
 
     def i_am_on_home_page(self, url):
         self.home_page = BingHomePage(url)
@@ -49,7 +65,7 @@ class SearchKeywords(object):
                 keyword
             )
 
-    def i_get_the_keyword_is_displayed_on_search_results(
+    def i_get_the_first_search_record_containing_keyword(
             self, keyword
     ):
         assert isinstance(
@@ -60,9 +76,18 @@ class SearchKeywords(object):
             self.search_results_page.text_of_first_record.lower()
         )
 
-        assert (bag_of_keywords[0] in keyword.lower()) or (
+        if (bag_of_keywords[0] in keyword.lower()) or (
                 bag_of_keywords[-1] in keyword.lower()
-        ), '"{}" not in "{}"'.format(
-            keyword,
-            self.search_results_page.text_of_first_record
-        )
+        ):
+            logger.info(
+                'Succeed on searching keyword within bing.com',
+                # html=True
+            )
+        else:
+            logger.error(
+                '"{}" not in "{}"'.format(
+                    keyword,
+                    self.search_results_page.text_of_first_record
+                ),
+                html=True
+            )

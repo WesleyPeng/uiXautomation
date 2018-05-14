@@ -14,7 +14,7 @@
 
 from behave import given, when, then
 
-from .pages import BingHomePage
+from bpt.pages import BingHomePage
 
 
 @given('I am on the homepage "{url}"')
@@ -29,11 +29,15 @@ def step_when_i_search_keyword(context, keyword):
         context.home_page.search_with_keyword(keyword)
 
 
-@then('I get the github repository is displayed')
-def step_then_i_get_the_github_repo_is_displayed(context):
-    assert context.keyword.lower() in \
-           context.search_results_page.text_of_first_record.lower(), \
-        '"{}" not in "{}"'.format(
-            context.keyword,
-            context.search_results_page.text_of_first_record
-        )
+@then('I get the first search result containing the keyword')
+def step_then_i_get_the_first_search_record_containing_keyword(context):
+    bag_of_keywords = str.split(
+        context.search_results_page.text_of_first_record.lower()
+    )
+
+    assert (bag_of_keywords[0] in context.keyword.lower()) or (
+            bag_of_keywords[-1] in context.keyword.lower()
+    ), '"{}" not in "{}"'.format(
+        context.keyword,
+        context.search_results_page.text_of_first_record
+    )
