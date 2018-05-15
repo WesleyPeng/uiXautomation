@@ -37,6 +37,11 @@ class Browser(AUT):
             'Maximize the current browser'
         )
 
+    def sync(self, timeout=30):
+        raise NotImplementedError(
+            'Synchronization until browser is fully loaded or timeout'
+        )
+
     def _create_instance(self, name, **kwargs):
         raise NotImplementedError(
             'Create web browser instance (type={})'.format(

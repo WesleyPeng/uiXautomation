@@ -38,11 +38,14 @@ cd ./src/test/python
 
 echo -e "${CYAN}Run BDD test(s)${NC}"
 python -m pip install allure-behave
-python -m bpt.bdd -f allure_behave.formatter:AllureFormatter -o ../../../${ARTIFACTS}/allure -t ~@wip -D browser="chrome" -D is_remote="True"
+python -m bpt.bdd -f allure_behave.formatter:AllureFormatter  \
+-o ../../../${ARTIFACTS}/allure -t ~@wip  \
+-D browser="chrome" -D is_remote="True"
 
 echo -e "${CYAN}Run ATDD test(s)${NC}"
 python -m pip install robotframework
-python -m robot -d ../../../${ARTIFACTS}/robot -v is_remote:True -v enable_screenshot:True bpt/atdd/robot/bing.robot
+python -m robot -d ../../../${ARTIFACTS}/robot  \
+-v is_remote:True -v enable_screenshot:True bpt/atdd/robot/bing.robot
 popd > /dev/null
 
 mv dist/dist/PyXTaf*.whl ${ARTIFACTS}/
