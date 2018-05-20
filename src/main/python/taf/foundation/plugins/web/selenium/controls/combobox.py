@@ -74,7 +74,7 @@ class ComboBox(WebElement, IComboBox):
             return ';'.join(
                 opt.object.text
                 for opt in self.options
-                if opt.is_selected
+                if opt.object.is_selected()
             )
 
         return r''
@@ -83,15 +83,15 @@ class ComboBox(WebElement, IComboBox):
     def options(self):
         if not self._children:
             if self.exists():
-                for element in ElementFinder(
+                self._children = [
+                    ListItem(element=element, parent=self)
+                    for element in ElementFinder(
                         self.object
-                ).find_elements(
-                    Locator.XPATH,
-                    './/{}'.format(self._options_tag)
-                ):
-                    self._children.add(
-                        ListItem(element=element, parent=self)
-                    )
+                    ).find_elements(
+                        Locator.XPATH,
+                        './/{}'.format(self._options_tag)
+                    ) if element  # and element.text
+                ]
 
         return (child for child in self._children)
 

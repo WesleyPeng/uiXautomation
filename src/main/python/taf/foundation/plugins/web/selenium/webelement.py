@@ -60,6 +60,15 @@ class WebElement(IWebElement):
                 self.object
             )
 
+    def highlight(self):
+        self.activate()
+
+        self.root.cache.current.execute_script(
+            'arguments[0].setAttribute("style", arguments[1]);',
+            self.object,
+            'color: green; border: 2px solid yellow;'
+        )
+
     def _wrap_element(self, element):
         if isinstance(element, SeElement):
             self._current = element

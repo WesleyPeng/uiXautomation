@@ -42,6 +42,11 @@ class UIElement(object):
 
         return self.object is not None
 
+    def highlight(self):
+        raise NotImplementedError(
+            'Highlight element'
+        )
+
     @classmethod
     def create(cls, **conditions):
         return cls(**conditions)

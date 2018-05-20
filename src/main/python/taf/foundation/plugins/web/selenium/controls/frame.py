@@ -56,11 +56,13 @@ class Frame(WebElement, IFrame):
         if not self._children:
             self.activate()
 
-            for element in ElementFinder(
+            self._children = [
+                WebElement.create(element=element, parent=self)
+                for element in ElementFinder(
                     self.object
-            ).find_elements(Locator.XPATH, './/*'):
-                self._children.add(
-                    WebElement.create(element=element)
-                )
+                ).find_elements(
+                    Locator.XPATH, './/*'
+                ) if element
+            ]
 
         return (child for child in self._children)
