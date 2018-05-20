@@ -23,14 +23,33 @@ from taf.modeling.web import Browser
 from taf.modeling.web import WebButton
 from taf.modeling.web import WebLink
 from taf.modeling.web import WebTextBox
+# from applitools.eyes import Eyes
 
 
 @skip('Temporarily ignore WebUI tests')
 class TestModelingTypes(TestCase):
+    # eyes = Eyes()
+
+    # @classmethod
+    # def setUpClass(cls):
+    #     cls.eyes.api_key = 'secret'
+    #
+    # @classmethod
+    # def tearDownClass(cls):
+    #     cls.eyes.abort_if_not_closed()
+
     def setUp(self):
         self.browser = Browser()
+        # self.eyes.open(
+        #     self.browser.cache.current,
+        #     'bing.com',
+        #     'UT',
+        #     {'width': 1600, 'height': 900}
+        # )
 
     def tearDown(self):
+        # self.eyes.close()
+
         self.browser.close()
         del self.browser
 
@@ -53,6 +72,7 @@ class TestModelingTypes(TestCase):
         self.browser.activate()
         self.browser.launch('http://www.bing.com')
         self.browser.maximize()
+        # self.eyes.check_window('browser')
 
         another_browser.close()
 
@@ -66,6 +86,8 @@ class TestModelingTypes(TestCase):
 
         self.browser.launch('http://www.bing.com')
         self.browser.maximize()
+
+        # self.eyes.check_window('bing home page')
 
         txt_search = WebTextBox(
             id='sb_form_q'
@@ -101,6 +123,8 @@ class TestModelingTypes(TestCase):
             txt_search.value,
             _value
         )
+
+        # self.eyes.check_window('search results')
 
         lnk_item = WebLink(
             xpath='//div[@id="b_content"]/ol[@id="b_results"]/li//a',

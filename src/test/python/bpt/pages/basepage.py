@@ -12,23 +12,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from taf.modeling.web import WebButton
-from taf.modeling.web import WebTextBox
-from .basepage import BasePage
-from .searchresultspage import SearchResultsPage
+from taf.foundation.api.ui.web import Page
 
 
-class BingHomePage(BasePage):
+class BasePage(Page):
     def __init__(self, url=None, *elements, **conditions):
-        super(BingHomePage, self).__init__(
-            url, *elements, **conditions
+        super(BasePage, self).__init__(
+            *elements, **conditions
         )
 
-        self.txt_search_box = WebTextBox(id='sb_form_q')
-        self.btn_search_go = WebButton(id='sb_form_go')
+        if url:
+            self.parent.launch(url)
+            self.parent.maximize()
 
-    def search_with_keyword(self, keyword):
-        self.txt_search_box.set(keyword)
-        self.btn_search_go.click()
-
-        return SearchResultsPage()
+        self.parent.sync()

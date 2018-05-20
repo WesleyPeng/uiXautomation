@@ -44,7 +44,7 @@ class WebElement(UIElement):
 
     def _find_current_element(self):
         if isinstance(self.parent, WebElement):
-            anchor = self.parent.current
+            anchor = self.parent.object
         elif isinstance(self.parent, Page):
             anchor = self.parent.root
         else:

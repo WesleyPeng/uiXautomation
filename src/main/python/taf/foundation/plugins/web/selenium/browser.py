@@ -59,6 +59,12 @@ class Browser(IBrowser):
     def maximize(self):
         self.cache.current.maximize_window()
 
+    def sync(self, timeout=30):
+        BrowserWaitHandler(
+            self.cache.current,
+            timeout
+        ).wait()
+
     def get_screenshot_data(self):
         if isinstance(self.cache.current, RemoteWebDriver):
             return self.cache.current.get_screenshot_as_png()

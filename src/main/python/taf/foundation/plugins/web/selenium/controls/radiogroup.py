@@ -78,27 +78,23 @@ class RadioGroup(WebElement, IRadioGroup):
     def items(self):
         if not self._children:
             if self.exists():
-                _options = ElementFinder(
-                    self.object
-                ).find_elements(
-                    Locator.XPATH,
-                    './/{}[@type="radio"]'.format(
-                        self._options_tag
-                    )
-                )
-                _labels = ElementFinder(
-                    self.object
-                ).find_elements(
-                    Locator.XPATH,
-                    './/{}'.format(self._label_tag)
-                )
-
-                for index, element in enumerate(_options):
-                    self._children.add(
-                        RadioButton(
-                            ListItem(element=element, parent=self),
-                            Edit(element=_labels[index], parent=self)
+                _finder = ElementFinder(self.object).find_elements
+                self._children = [
+                    RadioButton(
+                        ListItem(element=option, parent=self),
+                        Edit(element=label, parent=self)
+                    ) for option, label in zip(
+                        _finder(
+                            Locator.XPATH,
+                            './/{}[@type=radio]'.format(
+                                self._options_tag
+                            )
+                        ),
+                        _finder(
+                            Locator.XPATH,
+                            './/{}'.format(self._label_tag)
                         )
                     )
+                ]
 
         return (child for child in self._children)
