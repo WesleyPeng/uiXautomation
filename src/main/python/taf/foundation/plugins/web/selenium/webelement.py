@@ -69,6 +69,18 @@ class WebElement(IWebElement):
             'color: green; border: 2px solid yellow;'
         )
 
+    def _resolve_anchor(self):
+        anchor = super(
+            WebElement, self
+        )._resolve_anchor()
+
+        if getattr(
+                anchor, Locator.TAG.value
+        ) in ('iframe', 'frame'):
+            anchor = self.root.cache.current
+
+        return anchor
+
     def _wrap_element(self, element):
         if isinstance(element, SeElement):
             self._current = element

@@ -57,6 +57,7 @@ class AUT(object):
 
         if not self.cache.current:
             AUT.cache = None
+            AUT.current = None
 
     def get_screenshot_data(self):
         raise NotImplementedError(
