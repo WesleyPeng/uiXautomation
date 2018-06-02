@@ -58,10 +58,13 @@ class ElementFinder(object):
                         **conditions
                     )
                 )
-
-            return elements[index]
         except:
-            return None
+            pass
+        else:
+            if elements and (index < len(elements)):
+                return elements[index]
+
+        return None
 
     def find_elements(self, locator, value):
         elements = []
@@ -73,7 +76,10 @@ class ElementFinder(object):
         )
 
         if finder and callable(finder):
-            elements += finder(value)
+            try:
+                elements += finder(value)
+            except:
+                pass
 
         return elements
 
@@ -92,7 +98,7 @@ class ElementFinder(object):
                     pass  # TBH
                 else:
                     if attr_value and value and str(
-                        attr_value
+                            attr_value
                     ).upper() != str(value).upper():
                         break
             else:

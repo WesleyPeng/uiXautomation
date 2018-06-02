@@ -12,6 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import warnings
+
 from taf.foundation.api.ui.controls import Frame as IFrame
 from taf.foundation.plugins.web.selenium.support.elementfinder import ElementFinder
 from taf.foundation.plugins.web.selenium.support.locator import Locator
@@ -27,35 +29,35 @@ class Frame(WebElement, IFrame):
         )
 
     def __enter__(self):
-        self.activate()
-
-        return self
-
-    def __exit__(self, *args):
-        self.deactivate()
-
-    def activate(self):
-        if isinstance(self.parent, Frame):
-            self.parent.activate()
-        else:
-            self.root.cache.current.switch_to.default_content()
-
         if self.exists():
             self.root.cache.current.switch_to.frame(
                 self.object
             )
 
+        return self
+
+    def __exit__(self, *args):
+        self.root.cache.current.switch_to.parent_frame()
+
+    def activate(self):
+        warnings.warn(
+            'Use context manager "with Frame(id=frame)" instead',
+            DeprecationWarning
+        )
+
+        self.__enter__()
+
     def deactivate(self):
-        if isinstance(self.parent, Frame):
-            self.parent.activate()
-        else:
-            self.root.cache.current.switch_to.default_content()
+        warnings.warn(
+            'Use context manager "with Frame(id=frame)" instead',
+            DeprecationWarning
+        )
+
+        self.__exit__()
 
     @property
     def items(self):
         if not self._children:
-            self.activate()
-
             self._children = [
                 WebElement.create(element=element, parent=self)
                 for element in ElementFinder(

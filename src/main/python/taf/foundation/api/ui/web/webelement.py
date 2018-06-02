@@ -43,13 +43,6 @@ class WebElement(UIElement):
                 self._locators[key] = value
 
     def _find_current_element(self):
-        if isinstance(self.parent, WebElement):
-            anchor = self.parent.object
-        elif isinstance(self.parent, Page):
-            anchor = self.parent.root
-        else:
-            anchor = self.root.cache.current
-
         prioritized_locators = [
             (key, self._locators.get(key))
             for key in self.locator_enum.prioritized_locators()
@@ -57,11 +50,21 @@ class WebElement(UIElement):
         ]
 
         return self.element_finder(
-            anchor=anchor
+            anchor=self._resolve_anchor()
         ).find_element(
             *prioritized_locators,
             **self._constraints
         )
+
+    def _resolve_anchor(self):
+        if isinstance(self.parent, WebElement):
+            anchor = self.parent.object
+        elif isinstance(self.parent, Page):
+            anchor = self.parent.root
+        else:
+            anchor = self.root.cache.current
+
+        return anchor
 
     def _resolve_parent(self, element=None):
         if element is None:
