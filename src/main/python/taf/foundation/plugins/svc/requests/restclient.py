@@ -26,21 +26,19 @@ class RESTClient(Session, Client):
             port=None,
             username=None,
             password=None,
-            domain=None,
             **kwargs
     ):
         Session.__init__(self)
 
         Client.__init__(
             self, base_url, port,
-            username, password, domain,
-            **kwargs
+            username, password, **kwargs
         )
 
         self.verify = False
 
         self._set_auth(
-            password, username, domain
+            password, username
         )
 
         urllib3.disable_warnings()
@@ -102,8 +100,7 @@ class RESTClient(Session, Client):
     def _set_auth(
             self,
             username,
-            password,
-            domain=None
+            password
     ):
         self.auth = HTTPBasicAuth(
             username,

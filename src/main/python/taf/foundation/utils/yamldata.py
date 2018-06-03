@@ -99,21 +99,19 @@ class YAMLData(yaml.YAMLObject, Serializable):
 
     @classmethod
     def normalize_data(cls, data):
-        if isinstance(data, YAMLData):
-            return data
+        if not isinstance(data, YAMLData):
+            if hasattr(data, '__dict__'):
+                data = YAMLData(**vars(data))
+            elif isinstance(data, dict):
+                data = YAMLData(**data)
+            elif isinstance(data, (list, tuple)):
+                data = [
+                    cls.normalize_data(datum)
+                    for datum in data
+                ]
+            else:
+                data = yaml.safe_load(
+                    yaml.safe_dump(data)
+                )
 
-        if hasattr(data, '__dict__'):
-            return YAMLData(**vars(data))
-
-        if isinstance(data, dict):
-            return YAMLData(**data)
-
-        if isinstance(data, list):
-            return [
-                cls.normalize_data(datum)
-                for datum in data
-            ]
-
-        return yaml.safe_load(
-            yaml.safe_dump(data)
-        )
+        return data
