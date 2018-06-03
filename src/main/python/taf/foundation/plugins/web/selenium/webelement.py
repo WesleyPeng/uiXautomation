@@ -74,9 +74,14 @@ class WebElement(IWebElement):
             WebElement, self
         )._resolve_anchor()
 
-        if getattr(
-                anchor, Locator.TAG.value
-        ) in ('iframe', 'frame'):
+        try:
+            if getattr(
+                    anchor,
+                    Locator.TAG.value,
+                    None
+            ) in ('iframe', 'frame'):
+                anchor = self.root.cache.current
+        except:
             anchor = self.root.cache.current
 
         return anchor
