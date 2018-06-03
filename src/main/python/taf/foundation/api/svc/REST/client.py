@@ -24,7 +24,6 @@ class Client(object):
             port=None,
             username=None,
             password=None,
-            domain=None,
             **kwargs
     ):
         import sys
@@ -50,8 +49,7 @@ class Client(object):
         kwargs.update(
             url=_url.geturl(),
             username=username,
-            password=password,
-            domain=domain
+            password=password
         )
 
         self.params = kwargs
@@ -59,7 +57,7 @@ class Client(object):
     def __enter__(self):
         return self
 
-    def __exit__(self, exc_type, exc_val, exc_tb):
+    def __exit__(self, *args):
         raise NotImplementedError(
             'Close connection'
         )
