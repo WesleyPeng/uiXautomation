@@ -1,7 +1,8 @@
-# uiXautomation [![Travis Status](https://travis-ci.org/WesleyPeng/uiXautomation.svg?branch=master)](https://travis-ci.org/WesleyPeng/uiXautomation)
+# uiXautomation 
+[![Travis Status](https://travis-ci.org/WesleyPeng/uiXautomation.svg?branch=master)](https://travis-ci.org/WesleyPeng/uiXautomation) [![Code Climate](https://codeclimate.com/github/WesleyPeng/uiXautomation/badges/gpa.svg)](https://codeclimate.com/github/WesleyPeng/uiXautomation)
 
-### Overview
-Extensible Test Automation Framework
+## Overview
+uiXautomation project (a.k.a. `PyXTaf`) is an extensible multi-layered framework for test automation at different levels (e.g., UI, API, CLI, etc.)
 
 ### Architecture Diagram
 ![PyXTaf Diagram](diagram.png?raw=true "PyXTaf Architecture Diagram")
@@ -42,9 +43,9 @@ docker-compose down --rmi local --volumes
 ```
 
 #### License:
-* Apache License V2.0
+* [Apache License V2.0](LICENSE)
 
-#### Others:
+##### Others:
 Please help support this project with a donation:
 
 [![paypal donate][paypal-image]][paypal-url]

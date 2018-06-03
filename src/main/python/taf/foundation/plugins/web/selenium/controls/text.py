@@ -12,13 +12,23 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from .button import Button
-from .checkbox import CheckBox
-from .combobox import ComboBox
-from .edit import Edit
-from .frame import Frame
-from .link import Link
-from .listitem import ListItem
-from .radiogroup import RadioGroup
-from .table import Table
-from .text import Text
+from taf.foundation.api.ui.controls import Text as IText
+from taf.foundation.plugins.web.selenium.webelement import WebElement
+
+
+class Text(WebElement, IText):
+    def get_selection(self):
+        raise RuntimeError(
+            'Unsupported feature for web element'
+        )
+
+    @property
+    def text(self):
+        if self.exists():
+            return self.object.text
+
+        return r''
+
+    @property
+    def supports_text_selection(self):
+        return True
