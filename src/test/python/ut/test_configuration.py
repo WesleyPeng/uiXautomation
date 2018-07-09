@@ -17,11 +17,13 @@ from unittest import TestCase
 
 from taf.foundation.conf import Configuration
 from taf.foundation.utils import YAMLData
+# from taf.foundation.utils import logger
 
 
 class TestConfiguration(TestCase):
     def setUp(self):
         self.conf = Configuration()
+        # logger.setLevel('DEBUG')
 
     def test_configuration(self):
         self.assertIs(
@@ -45,6 +47,7 @@ class TestConfiguration(TestCase):
 
         self.conf.save_as(_conf_file)
 
+        # logger.debug('Validating configuration file')
         self.assertTrue(
             os.path.isfile(_conf_file)
         )
@@ -55,6 +58,8 @@ class TestConfiguration(TestCase):
                     break
             else:
                 found = False
+
+        # logger.debug('Validating configuration value')
         self.assertTrue(found)
 
         os.remove(_conf_file)

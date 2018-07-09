@@ -12,6 +12,29 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from .connectioncache import ConnectionCache
-from .logger import logger
-from .yamldata import YAMLData
+import logging
+import sys
+
+
+def _logger(name=None):
+    if not name:
+        name = __name__.split('.')[0]
+    __logger = logging.getLogger(name)
+
+    if not __logger.handlers:
+        handler = logging.StreamHandler(sys.stdout)
+        handler.setLevel(logging.DEBUG)
+        handler.setFormatter(
+            logging.Formatter(
+                '[%(asctime)s] [%(levelname)s] %(message)s',
+                '%Y-%m-%d %H:%M:%S'
+            )
+        )
+
+        __logger.setLevel(logging.INFO)
+        __logger.addHandler(handler)
+
+    return __logger
+
+
+logger = _logger()
