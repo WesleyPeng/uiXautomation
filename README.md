@@ -7,19 +7,11 @@ uiXautomation project (a.k.a. `PyXTaf`) is an extensible multi-layered framework
 ### Architecture Diagram
 ![PyXTaf Diagram](diagram.png?raw=true "PyXTaf Architecture Diagram")
 
-#### Plugins:
-* WEB - Based on _**[Selenium WebDriver](http://www.seleniumhq.org/projects/webdriver/)**_  
-* Mobile - Based on _**[appium](http://github.com/appium/appium)**_
-* CLI - Based on _**[paramiko](https://github.com/paramiko/paramiko)**_
-* REST - Based on _**[requests](https://github.com/requests/requests)**_
-
-#### Dependencies:
-* enum34 (1.1.6+)
-* paramiko (1.16.0+)
-* PyYAML (3.11+)
-* requests (2.9.1+)
-* Appium-Python-Client (0.24+)
-    * Selenium (2.48.0+)
+#### Installation
+Install the latest package ([PyXTaf](https://pypi.org/project/PyXTaf)) from PyPI
+```bash
+pip install PyXTaf
+```
 
 #### Build
 PyBuilder (pyb) is used to build wheel file in the project
@@ -41,6 +33,20 @@ docker-compose run --rm pyxtaf build#
 # stop services and remove local images
 docker-compose down --rmi local --volumes
 ```
+
+#### Plugins:
+* WEB - Based on _**[Selenium WebDriver](http://www.seleniumhq.org/projects/webdriver/)**_  
+* Mobile - Based on _**[appium](http://github.com/appium/appium)**_
+* CLI - Based on _**[paramiko](https://github.com/paramiko/paramiko)**_
+* REST - Based on _**[requests](https://github.com/requests/requests)**_
+
+#### Dependencies:
+* enum34 (1.1.6+)
+* paramiko (1.16.0+)
+* PyYAML (3.11+)
+* requests (2.9.1+)
+* Appium-Python-Client (0.24+)
+    * Selenium (2.48.0+)
 
 #### License:
 * [Apache License V2.0](LICENSE)
