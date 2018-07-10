@@ -9,22 +9,21 @@ python:
 #virtualenv:
 #    system_site_packages: true
 
-#before_install:
-#    - echo "[egg_info]" >> src/main/python/setup.cfg
-#    - echo "tag_build=${TRAVIS_BUILD_NUMBER}" >> src/main/python/setup.cfg
+before_install:
+    - python -m pip install -U pip
 
 install:
-    - pip install pybuilder
-    - pip install enum34
-    - pip install paramiko
-    - pip install PyYAML
-    - pip install requests
-#    - pip install selenium
-    - pip install Appium-Python-Client
-    - pip install allure-behave
+    - pip install -r src/main/python/requirements-dev.txt
 
-script: pyb -v clean publish
+before_script:
+    - echo "" >> src/main/python/setup.cfg
+    - echo "[egg_info]" >> src/main/python/setup.cfg
+    - echo "tag_build=${TRAVIS_BUILD_NUMBER}" >> src/main/python/setup.cfg
 
-#notifications:
-#    email:
-#        - wesley.peng@live.com
+script:
+    - pyb -v clean publish
+    - ls dist/dist -lat
+
+notifications:
+    email:
+        - wesley.peng@live.com
