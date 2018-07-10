@@ -6,6 +6,9 @@ python:
 - 2.7.10
 - 3.6.4
 
+#virtualenv:
+#  system_site_packages: true
+
 before_install:
 - python -m pip install -U pip
 
@@ -19,19 +22,21 @@ before_script:
 
 script:
 - pyb -v clean publish
-- cp dist/dist/PyXTaf* dist/
 
-notifications:
-  email:
-  - wesley.peng@live.com
+before_deploy:
+- cd dist/
 
 deploy:
   provider: pypi
   user: wesley.peng
   password:
     secure: b3uoxadU8TSm65FDLNf1IzSV6xVwC4ifOFH2CoW0Xm6ZXsoOpWlWusnOa9jtK2T63lyFWfVnWB5oWPx/UeiswjJVT9r703A4W30Fx3/Uk5XjwFPIDy57wHQQxvVp46mj9NZ6XRPS1cbIAmjvFU/oLasAGP349v0Z8+Hjv5eTbtO2Z9p4h4bK1V2N5KRg9jcE9EIYqm+wy3aWjd8JH8a4hMeRPF9lOzRp77GBNsiIIB3pbYy13KpCRTJmXBvvd+ZE4RmaOYAC6cDesL1dppiTQeVn8mCj5W24hTvGpRn7iYkUMBuOwAQ+gFvRs5yhvwxBd9vMApbskrOgdhTCaa/RKuTVq8W89wey/JFM/gDxGRI9eRgPShXzYxprA85d2x/5ifqM6XiGGp5btJOPyD+fmHP0GaBG763hwuUgw86tK4ec5lfAGw3qcNBYJBeixs1lnluygHMej/+jSn/W5Hkt8tQk8UjrCb7i1W51g1LTJ9V/imxmN5R2fGNdQZJ/5n2L9e3hUBEeM0fzQHXajIEWaPIPTU2rs1igGJYMyyGCCxMEuTWkAzhsRtOcpzWGy/yMtqi+I9NGWgyQ1JmZyKpTH5i3DOflu4dUU1bCQFNdxDyJguhV+SbtDs8PxUmy96XbChLi7IWhEIO6QtHQqgSbhzLFiOLsVgXokHaQViVpeXw=
+  skip_cleanup: true
   on:
     tags: true
     distributions: bdist_wheel
     repo: WesleyPeng/uiXautomation
-    branch: master
+
+#notifications:
+#  email:
+#  - wesley.peng@live.com
