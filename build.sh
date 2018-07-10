@@ -8,6 +8,7 @@ ARTIFACTS=artifacts
 
 TAG_BUILD=$1
 echo -e "${CYAN}Set Build Number(${TAG_BUILD})${NC}"
+echo "" >> src/main/python/setup.cfg
 echo "[egg_info]" >> src/main/python/setup.cfg
 echo "tag_build=${TAG_BUILD}" >> src/main/python/setup.cfg
 
