@@ -12,13 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import logging
 import os
 import tempfile
 
 import paramiko
 
 from taf.foundation.api.cli import Client
+from taf.foundation.utils import logger
 
 
 class SSHClient(
@@ -56,12 +56,12 @@ class SSHClient(
 
             std_console = std_out.read(), std_err.read()
         except (IOError, paramiko.SSHException) as ex:
-            logging.error(ex.message)
+            logger.error(ex.message)
         except Exception:
             raise
         else:
             if (len(std_console) > 1) and std_console[-1]:
-                logging.debug(
+                logger.debug(
                     '\n[DEBUG|WARN|ERROR] messages '
                     'are redirected to stderr '
                     'while executing the command\n'

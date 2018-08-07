@@ -38,7 +38,7 @@ class RESTClient(Session, Client):
         self.verify = False
 
         self._set_auth(
-            password, username
+            username, password
         )
 
         urllib3.disable_warnings()
