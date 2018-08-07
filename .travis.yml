@@ -24,6 +24,7 @@ script:
 - pyb -v clean publish
 
 before_deploy:
+- cp README.md dist/
 - cd dist/
 
 deploy:
