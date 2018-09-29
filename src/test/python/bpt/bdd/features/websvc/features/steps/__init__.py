@@ -12,5 +12,4 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from bpt.bdd.features.websvc.features.steps import *
-from bpt.bdd.features.webui.features.steps import *
+from .api_httpbin import *
